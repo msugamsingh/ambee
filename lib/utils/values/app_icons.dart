@@ -11,9 +11,10 @@ class AppIcons {
   static const IconData degree = CupertinoIcons.circle;
 }
 
-
 class WeatherIcons {
   static const _path = 'assets/icons/weather/';
-  static const String icRainWithWind = '${_path}rain_with_wind.png';
-  static const String icThunderStorm = '${_path}28.png';
+
+  static String getWeatherIcon(String name) {
+    return '$_path$name.png';
+  }
 }

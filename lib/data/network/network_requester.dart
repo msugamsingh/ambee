@@ -17,7 +17,7 @@ class NetworkRequester {
     BaseOptions dioOptions = BaseOptions(
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout:  const Duration(seconds: 10),
-      baseUrl: Env.baseUrl,
+      baseUrl: URLs.baseUrl,
       contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
       headers: {
