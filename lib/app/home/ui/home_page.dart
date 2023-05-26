@@ -1,7 +1,8 @@
 import 'package:ambee/app/home/bloc/home_cubit.dart';
+import 'package:ambee/data/theme/text_styles.dart';
+import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
-import 'package:ambee/utils/values/theme/text_styles.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  AppBar appBar() {
+  AppBar appBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
       leading: IconButton(
@@ -30,7 +31,9 @@ class HomePage extends StatelessWidget {
       actions: [
         IconButton(
           icon: const Icon(AppIcons.threeDotsMenu),
-          onPressed: () {},
+          onPressed: () {
+            context.read<ThemeCubit>().changeTheme();
+          },
         ),
       ],
     );
@@ -56,7 +59,7 @@ class HomePage extends StatelessWidget {
         var cubit = context.read<HomeCubit>();
         return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: appBar(),
+          appBar: appBar(context),
           body: Column(
             children: [
               Expanded(
@@ -113,7 +116,7 @@ class HomePage extends StatelessWidget {
                           const SizedBox(
                             height: 10 * 2,
                           ),
-                          const DegreeText(
+                           DegreeText(
                             text: '21',
                             style: Styles.tsRegularExtraLarge148,
                           ),

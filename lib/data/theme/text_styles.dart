@@ -1,9 +1,12 @@
+import 'package:ambee/utils/storage/storage.dart';
 import 'package:flutter/material.dart';
 
 class Styles {
   Styles._privateConstructor();
 
-  static const TextStyle tsRegularBodyText = TextStyle(
+  static var theme = Storage.getTheme();
+
+  static TextStyle tsRegularBodyText = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14.0,
   );
@@ -12,7 +15,7 @@ class Styles {
     fontSize: 16.0,
   );
 
-  static const TextStyle tsRegularExtraLarge148 = TextStyle(
+  static  TextStyle tsRegularExtraLarge148 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 148,
   );

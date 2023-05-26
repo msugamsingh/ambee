@@ -20,6 +20,7 @@ dependencies:
   location: ^5.0.0-dev.8
   loading_animation_widget: ^1.2.0+4
   logger: ^1.3.0
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

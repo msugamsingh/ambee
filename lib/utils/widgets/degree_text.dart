@@ -1,5 +1,5 @@
+import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/utils/values/app_icons.dart';
-import 'package:ambee/utils/values/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class DegreeText extends StatelessWidget {

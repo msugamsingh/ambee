@@ -3,10 +3,12 @@ import 'package:ambee/app/home/ui/home_page.dart';
 import 'package:ambee/app/splash/ui/splash_page.dart';
 import 'package:ambee/data/env.dart';
 import 'package:ambee/data/routes.dart';
-import 'package:ambee/utils/values/theme/app_theme.dart';
+import 'package:ambee/data/theme/app_theme.dart';
+import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,7 @@ void main() async {
     // statusBarBrightness: Brightness.dark,
     statusBarIconBrightness: Brightness.dark,
   ));
-
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -31,15 +33,22 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) => HomeCubit(),
         ),
+        BlocProvider(
+          create: (BuildContext context) => ThemeCubit(),
+        ),
       ],
-      child: MaterialApp(
-        title: Env.title,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
-        initialRoute: Routes.splash,
-        routes: {
-          Routes.splash: (context) => const SplashPage(),
-          Routes.home: (context) => const HomePage(),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: Env.title,
+            debugShowCheckedModeBanner: false,
+            theme: state.darkTheme ? AppTheme.darkTheme : AppTheme.lightTheme,
+            initialRoute: Routes.splash,
+            routes: {
+              Routes.splash: (context) => const SplashPage(),
+              Routes.home: (context) => const HomePage(),
+            },
+          );
         },
       ),
     );
