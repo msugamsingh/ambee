@@ -13,7 +13,7 @@ extension StringToDouble on String? {
     double? n;
     try {
       n = double.parse(this!);
-    } finally {
+    } catch(e) {
       n = null;
     }
     return n;

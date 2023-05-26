@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/splash/bloc/splash_cubit.dart';
 import 'package:ambee/data/network/network_error_messages.dart';
+import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
@@ -43,31 +44,34 @@ class SplashPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              padding: const EdgeInsets.all(18),
-              height: MediaQuery.sizeOf(context).width / 1.5,
-              width: MediaQuery.sizeOf(context).width / 1.5,
-              color: Colors.white12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  state.error.isNullOrEmpty
-                      ? LoadingAnimationWidget.inkDrop(
-                          color: AppColors.sun,
-                          size: 100,
-                        )
-                      : LoadingAnimationWidget.newtonCradle(
-                          color: AppColors.sun,
-                          size: 100,
-                        ),
-                  const Spacer(),
-                  const DegreeText(
-                    text: 'Weather',
-                    degreeSize: 8,
-                  ),
-                ],
+            child: GestureDetector(
+              onTap:             context.read<ThemeCubit>().changeTheme,
+              child: Container(
+                padding: const EdgeInsets.all(18),
+                height: MediaQuery.sizeOf(context).width / 1.5,
+                width: MediaQuery.sizeOf(context).width / 1.5,
+                color: Colors.white12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    state.error.isNullOrEmpty
+                        ? LoadingAnimationWidget.inkDrop(
+                            color: AppColors.sun,
+                            size: 100,
+                          )
+                        : LoadingAnimationWidget.newtonCradle(
+                            color: AppColors.sun,
+                            size: 100,
+                          ),
+                    const Spacer(),
+                    const DegreeText(
+                      text: 'ae',
+                      degreeSize: 8,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

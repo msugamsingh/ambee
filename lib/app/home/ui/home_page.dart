@@ -1,4 +1,5 @@
 import 'package:ambee/app/home/bloc/home_cubit.dart';
+import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:ambee/utils/values/app_colors.dart';
@@ -15,7 +16,9 @@ class HomePage extends StatelessWidget {
       centerTitle: true,
       leading: IconButton(
         icon: const Icon(AppIcons.boltCircular),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(Routes.splash);
+        },
       ),
       title: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -55,8 +58,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.sizeOf(context).width;
     return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        var cubit = context.read<HomeCubit>();
+      builder: (c, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: appBar(context),
@@ -116,13 +118,18 @@ class HomePage extends StatelessWidget {
                           const SizedBox(
                             height: 10 * 2,
                           ),
-                           DegreeText(
-                            text: '21',
-                            style: Styles.tsRegularExtraLarge148,
+                          DegreeText(
+                            text: state.weatherData?.current?.temp?.toString(),
+                            style: Styles.tsRegularExtraLarge148.copyWith(
+                              color: AppColors.white,
+                            ),
+                            degreeSize: 16,
                           ),
-                          const Text(
+                          Text(
                             'Thunderstorm',
-                            style: Styles.tsRegularHeadline24,
+                            style: Styles.tsRegularHeadline24.copyWith(
+                              color: AppColors.white,
+                            ),
                           )
                         ],
                       ),
@@ -132,7 +139,7 @@ class HomePage extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  color: AppColors.bgColor,
+                  color: AppColors.transparent,
                 ),
               )
             ],

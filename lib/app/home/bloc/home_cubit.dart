@@ -22,12 +22,13 @@ class HomeCubit extends Cubit<HomeState> {
     RepoResponse<WeatherData> response =
         await _repo.getWeather(lat: state.lat, lon: state.lon);
     if (response.error == null && response.data != null) {
-      Log.i(response.data);
+      Log.i(response.data?.toJson());
       emit(
         state.copyWith(
           isLoading: false,
           error: null,
           currentWeather: response.data?.current?.weather?.first,
+          weatherData: response.data,
         ),
       );
     } else {

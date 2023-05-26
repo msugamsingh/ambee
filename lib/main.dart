@@ -30,11 +30,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (BuildContext context) => HomeCubit(),
-        ),
+
         BlocProvider(
           create: (BuildContext context) => ThemeCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => HomeCubit(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
