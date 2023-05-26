@@ -2,6 +2,7 @@ import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page.dart';
 import 'package:ambee/app/splash/ui/splash_page.dart';
 import 'package:ambee/data/env.dart';
+import 'package:ambee/data/routes.dart';
 import 'package:ambee/utils/values/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +36,11 @@ class MyApp extends StatelessWidget {
         title: Env.title,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const SplashPage(),
+        initialRoute: Routes.splash,
+        routes: {
+          Routes.splash: (context) => const SplashPage(),
+          Routes.home: (context) => const HomePage(),
+        },
       ),
     );
   }

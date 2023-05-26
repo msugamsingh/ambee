@@ -20,11 +20,13 @@ class NetworkRequester {
       baseUrl: URLs.baseUrl,
       contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
+      queryParameters: {
+        'appid': API_KEY,
+      },
       headers: {
         'Accept': "*/*",
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
-        'appid': API_KEY,
       },
     );
 

@@ -1,9 +1,14 @@
 import 'dart:ui';
 
+import 'package:ambee/app/home/bloc/home_cubit.dart';
+import 'package:ambee/app/splash/bloc/splash_cubit.dart';
+import 'package:ambee/data/network/network_error_messages.dart';
+import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashPage extends StatelessWidget {
@@ -26,13 +31,11 @@ class SplashPage extends StatelessWidget {
         image,
         width: 300,
         height: 300,
-        // width: constraints.maxWidth * 1.2, // because it is beyond width
-        // fit: BoxFit.fitWidth,
       ),
     );
   }
 
-  Widget loadingCard(BuildContext context) {
+  Widget loadingCard(BuildContext context, SplashState state) {
     return Positioned.fill(
       child: Align(
         alignment: Alignment.center,
@@ -50,10 +53,15 @@ class SplashPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  LoadingAnimationWidget.inkDrop(
-                    color: AppColors.sun,
-                    size: 100,
-                  ),
+                  state.error.isNullOrEmpty
+                      ? LoadingAnimationWidget.inkDrop(
+                          color: AppColors.sun,
+                          size: 100,
+                        )
+                      : LoadingAnimationWidget.newtonCradle(
+                          color: AppColors.sun,
+                          size: 100,
+                        ),
                   const Spacer(),
                   const DegreeText(
                     text: 'Weather',
@@ -68,53 +76,96 @@ class SplashPage extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.mainColorSecondary,
-              AppColors.mainColor,
-              AppColors.mainColorPrimary,
-            ],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
+  void onError({
+    required BuildContext context,
+    String? message,
+  }) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.bgColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+          duration: const Duration(minutes: 5),
+          content: Text(
+            message ?? ErrorMessages.networkGeneral,
+          ),
+          action: SnackBarAction(
+            label: 'Retry',
+            onPressed: () {
+              context.read<SplashCubit>().refreshFetchData(context);
+            },
           ),
         ),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Stack(
-              children: [
-                positionedImage(
-                  image: WeatherIcons.getWeatherIcon('02d'),
-                  left: -constraints.maxWidth * .2,
-                  right: -constraints.maxWidth * .1,
-                  top: constraints.maxHeight - 200,
-                ),
-                positionedImage(
-                  image: WeatherIcons.getWeatherIcon('shower_rain'),
-                  left: constraints.maxWidth * .2,
-                  right: constraints.maxWidth * .1,
-                  bottom: constraints.maxHeight - 200,
-                ),
-                positionedImage(
-                  image: WeatherIcons.getWeatherIcon('01d'),
-                  left: constraints.maxWidth - 200,
-                  bottom: constraints.maxHeight * .5,
-                ),
-                positionedImage(
-                  image: WeatherIcons.getWeatherIcon('01n'),
-                  right: constraints.maxWidth - 200,
-                  top: constraints.maxHeight * .5,
-                ),
-                loadingCard(context),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SplashCubit(),
+      child: Scaffold(
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.mainColorSecondary,
+                AppColors.mainColor,
+                AppColors.mainColorPrimary,
               ],
-            );
-          },
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: BlocBuilder<SplashCubit, SplashState>(
+            builder: (context, splashState) {
+              if (!splashState.error.isNullOrEmpty) {
+                onError(context: context, message: splashState.error);
+              }
+              return BlocListener<HomeCubit, HomeState>(
+                listenWhen: (_, __) => splashState.listen,
+                listener: context.read<SplashCubit>().navigateToHome,
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Stack(
+                      children: [
+                        positionedImage(
+                          image: WeatherIcons.getWeatherIcon('02d'),
+                          left: -constraints.maxWidth * .2,
+                          right: -constraints.maxWidth * .1,
+                          top: constraints.maxHeight - 200,
+                        ),
+                        positionedImage(
+                          image: WeatherIcons.getWeatherIcon('shower_rain'),
+                          left: constraints.maxWidth * .2,
+                          right: constraints.maxWidth * .1,
+                          bottom: constraints.maxHeight - 200,
+                        ),
+                        positionedImage(
+                          image: WeatherIcons.getWeatherIcon('01d'),
+                          left: constraints.maxWidth - 200,
+                          bottom: constraints.maxHeight * .5,
+                        ),
+                        positionedImage(
+                          image: WeatherIcons.getWeatherIcon('01n'),
+                          right: constraints.maxWidth - 200,
+                          top: constraints.maxHeight * .5,
+                        ),
+                        loadingCard(context, splashState),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

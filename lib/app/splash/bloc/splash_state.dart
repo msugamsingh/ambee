@@ -1,10 +1,27 @@
 part of 'splash_cubit.dart';
 
-abstract class SplashState extends Equatable {
-  const SplashState();
-}
+class SplashState extends Equatable {
+  final bool listen;
+  final String? error;
 
-class SplashInitial extends SplashState {
+  const SplashState({
+    this.listen = true,
+    this.error,
+  });
+
+  SplashState copyWith({
+    bool? listen,
+    String? error,
+  }) {
+    return SplashState(
+      listen: listen ?? this.listen,
+      error: error ?? this.error,
+    );
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+        listen,
+        error,
+      ];
 }

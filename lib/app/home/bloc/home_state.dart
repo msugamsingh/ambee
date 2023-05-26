@@ -10,7 +10,7 @@ class HomeState extends Equatable {
   final double lon;
 
   const HomeState({
-    this.isLoading = true,
+    this.isLoading = false,
     this.error,
     this.currentWeather,
     this.weatherData,
