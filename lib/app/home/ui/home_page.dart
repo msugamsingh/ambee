@@ -2,6 +2,7 @@ import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
+import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
@@ -42,16 +43,61 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget getWeatherIcon({required HomeCubit cubit, required double width}) {
-    if (cubit.state.currentWeather != null &&
-        cubit.state.currentWeather!.icon != null) {
+  Widget getWeatherIcon({required HomeState state, required double width}) {
+    if (state.currentWeather != null && state.currentWeather!.icon != null) {
       return Image.asset(
-        WeatherIcons.getWeatherIcon(cubit.state.currentWeather!.icon!),
+        WeatherIcons.getWeatherIcon(state.currentWeather!.icon!),
         width: width / 1.5,
       );
     } else {
       return SizedBox(height: width / 1.5);
     }
+  }
+
+  Widget detailRowItem(IconData icon, String value, String label) {
+    return SizedBox(
+      width: 80,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: AppColors.white,
+          ),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: Styles.tsRegularLight12.copyWith(
+                color: AppColors
+                    .white), // todo: should be tsLight12, create tsRegular12 with w400
+          ),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: Styles.tsRegularLight12.copyWith(color: AppColors.white38),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget detailsRow(HomeState state) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        detailRowItem(AppIcons.wind,
+            '${(state.weatherData?.current?.windSpeed) ?? ''}m/s', 'Wind'),
+        detailRowItem(AppIcons.humidity,
+            '${(state.weatherData?.current?.humidity) ?? ''}%', 'Humidity'),
+        detailRowItem(
+            AppIcons.rain,
+            '${((state.weatherData?.current?.pop) ?? 0) * 100}%',
+            'Chances of rain'),
+      ],
+    );
   }
 
   @override
@@ -86,7 +132,8 @@ class HomePage extends StatelessWidget {
                     ),
                     Container(
                       width: width,
-                      margin: const EdgeInsets.only(bottom: 20.0),
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -114,23 +161,37 @@ class HomePage extends StatelessWidget {
                           const SizedBox(
                             height: kToolbarHeight * 2,
                           ),
-                          getWeatherIcon(cubit: HomeCubit(), width: width),
+                          getWeatherIcon(state: state, width: width),
                           const SizedBox(
                             height: 10 * 2,
                           ),
                           DegreeText(
                             text: state.weatherData?.current?.temp?.toString(),
-                            style: Styles.tsRegularExtraLarge148.copyWith(
+                            style: Styles.tsRegularExtraLarge100.copyWith(
                               color: AppColors.white,
                             ),
                             degreeSize: 16,
                           ),
                           Text(
-                            'Thunderstorm',
-                            style: Styles.tsRegularHeadline24.copyWith(
+                            state.currentWeather?.main?.toString() ?? 'Unknown',
+                            style: Styles.tsRegularHeadline22.copyWith(
                               color: AppColors.white,
                             ),
-                          )
+                          ),
+                          Text(
+                            formattedDate(
+                                DateTime.now(), DateFormatter.DAY_DATE_MONTH),
+                            style: Styles.tsRegularBodyText.copyWith(
+                              color: AppColors.white38,
+                            ),
+                          ),
+                          const Divider(
+                            color: AppColors.white38,
+                            indent: 20,
+                            endIndent: 20,
+                            thickness: 0.5,
+                          ),
+                          detailsRow(state),
                         ],
                       ),
                     ),

@@ -9,6 +9,9 @@ class AppIcons {
   static const IconData location = Icons.location_pin;
   static const IconData threeDotsMenu = CupertinoIcons.ellipsis_vertical;
   static const IconData degree = CupertinoIcons.circle;
+  static const IconData wind = CupertinoIcons.wind_snow;
+  static const IconData humidity = CupertinoIcons.drop;
+  static const IconData rain = CupertinoIcons.cloud_drizzle;
 }
 
 class WeatherIcons {

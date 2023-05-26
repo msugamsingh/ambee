@@ -23,7 +23,6 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   void getThemeFromStorage() {
-    print('lmao');
     var isDarkTheme = Storage.getTheme();
     emit(
       state.copyWith(

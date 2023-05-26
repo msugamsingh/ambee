@@ -6,7 +6,7 @@ class Styles {
 
   static var theme = Storage.getTheme();
 
-  static TextStyle tsRegularBodyText = TextStyle(
+  static const TextStyle tsRegularBodyText = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14.0,
   );
@@ -15,9 +15,9 @@ class Styles {
     fontSize: 16.0,
   );
 
-  static  TextStyle tsRegularExtraLarge148 = TextStyle(
-    fontWeight: FontWeight.w500,
-    fontSize: 148,
+  static const TextStyle tsRegularExtraLarge100 = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 100,
   );
 
   static const TextStyle tsRegularMidHeadline18 = TextStyle(
@@ -47,8 +47,12 @@ class Styles {
     fontWeight: FontWeight.w300,
     fontSize: 14.0,
   );
-  static const TextStyle tsRegularLight12 = TextStyle(
+  static const TextStyle tsLight12 = TextStyle(
     fontWeight: FontWeight.w200,
+    fontSize: 12.0,
+  );
+  static const TextStyle tsRegularLight12 = TextStyle(
+    fontWeight: FontWeight.w400,
     fontSize: 12.0,
   );
   static const TextStyle tsRegularLight10 = TextStyle(
