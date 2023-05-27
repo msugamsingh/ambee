@@ -72,7 +72,7 @@ class HourlyWeather extends StatelessWidget {
                 hourly?.dt != null
                     ? Text(
                         formattedDate(
-                          DateTime.fromMicrosecondsSinceEpoch(
+                          DateTime.fromMillisecondsSinceEpoch(
                               hourly!.dt! * 1000),
                           DateFormatter.HOUR24_MINUTE,
                         ),
