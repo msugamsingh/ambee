@@ -6,9 +6,10 @@ class AppTheme {
   static final darkTheme = ThemeData(
     fontFamily: 'poppins',
     primaryColor:  AppColors.mainColorPrimary,
+    brightness: Brightness.dark,
     // unselectedWidgetColor: Colors.blueGrey[400],
     useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mainColorPrimary),
+    // colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mainColorPrimary),
     scaffoldBackgroundColor: AppColors.bgColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.transparent,
@@ -25,6 +26,7 @@ class AppTheme {
     fontFamily: 'poppins',
     primaryColor:  AppColors.mainColorPrimary,
     // unselectedWidgetColor: Colors.blueGrey[400],
+    brightness: Brightness.light,
     textTheme: const TextTheme(
       displayLarge: _lightColorText,
         displayMedium: _lightColorText,
@@ -40,7 +42,7 @@ class AppTheme {
         bodySmall: _lightColorText,
     ),
     useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mainColorPrimary),
+    // colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mainColorPrimary),
     scaffoldBackgroundColor: AppColors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.transparent,

@@ -9,4 +9,6 @@ String formattedDate(DateTime dateTime, [String? formatType]) {
 class DateFormatter {
   static const DAY_DATE_MONTH = 'EEEE, d MMMM';
   static const DATE_MON_YEAR = 'dd-MM-yyyy';
+  static const HOUR24 = 'H';
+  static const HOUR24_MINUTE = 'Hm';
 }

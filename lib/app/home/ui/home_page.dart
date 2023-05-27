@@ -1,4 +1,5 @@
 import 'package:ambee/app/home/bloc/home_cubit.dart';
+import 'package:ambee/app/home/ui/home_page_hourly_list.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
+import 'package:ambee/utils/widgets/text_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,6 +50,7 @@ class HomePage extends StatelessWidget {
       return Image.asset(
         WeatherIcons.getWeatherIcon(state.currentWeather!.icon!),
         width: width / 1.5,
+        height: width / 1.5,
       );
     } else {
       return SizedBox(height: width / 1.5);
@@ -69,9 +72,7 @@ class HomePage extends StatelessWidget {
           Text(
             value,
             textAlign: TextAlign.center,
-            style: Styles.tsRegularLight12.copyWith(
-                color: AppColors
-                    .white), // todo: should be tsLight12, create tsRegular12 with w400
+            style: Styles.tsRegularLight12.copyWith(color: AppColors.white),
           ),
           Text(
             label,
@@ -83,19 +84,103 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget detailsRow(HomeState state) {
+  Widget detailsRow(HomeCubit cubit) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        detailRowItem(AppIcons.wind,
-            '${(state.weatherData?.current?.windSpeed) ?? ''}m/s', 'Wind'),
-        detailRowItem(AppIcons.humidity,
-            '${(state.weatherData?.current?.humidity) ?? ''}%', 'Humidity'),
-        detailRowItem(
-            AppIcons.rain,
-            '${((state.weatherData?.current?.pop) ?? 0) * 100}%',
-            'Chances of rain'),
+        detailRowItem(AppIcons.wind, cubit.getWindSpeed(), 'Wind'),
+        detailRowItem(AppIcons.humidity, cubit.getHumidity(), 'Humidity'),
+        (cubit.state.selectedHourIndex >= 0)
+            ? detailRowItem(AppIcons.rain, cubit.getRainPop(), 'Chances')
+            : detailRowItem(AppIcons.uv, cubit.getUVI(), 'UV'),
+      ],
+    );
+  }
+
+  Widget weatherContent(double width, HomeState state, HomeCubit cubit) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: width / 25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(width / 5),
+                  bottomRight: Radius.circular(width / 5),
+                ),
+                color: AppColors.darkPrimary,
+              ),
+              height: 100,
+            ),
+          ),
+        ),
+        Container(
+          width: width,
+          margin: const EdgeInsets.only(bottom: 16.0),
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.mainColorPrimary.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 20,
+              ),
+            ],
+            border: Border.all(color: AppColors.mainColorSecondary, width: 0.5),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(width / 5),
+              bottomRight: Radius.circular(width / 5),
+            ),
+            gradient: const LinearGradient(
+              colors: [
+                AppColors.mainColorSecondary,
+                AppColors.mainColorPrimary,
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: kToolbarHeight * 2,
+              ),
+              getWeatherIcon(state: state, width: width),
+              DegreeText(
+                text: cubit.getTemp(),
+                style: Styles.tsRegularExtraLarge100.copyWith(
+                  color: AppColors.white,
+                ),
+                degreeSize: 16,
+              ),
+              Text(
+                state.currentWeather?.main?.toString() ?? 'Unknown',
+                style: Styles.tsRegularHeadline22.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+              Text(
+                formattedDate(DateTime.now(), DateFormatter.DAY_DATE_MONTH),
+                style: Styles.tsRegularBodyText.copyWith(
+                  color: AppColors.white38,
+                ),
+              ),
+              const Spacer(),
+              const Divider(
+                color: AppColors.white38,
+                indent: 20,
+                endIndent: 20,
+                thickness: 0.5,
+              ),
+              detailsRow(cubit),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -105,6 +190,7 @@ class HomePage extends StatelessWidget {
     var width = MediaQuery.sizeOf(context).width;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (c, state) {
+        var cubit = c.read<HomeCubit>();
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: appBar(context),
@@ -112,95 +198,46 @@ class HomePage extends StatelessWidget {
             children: [
               Expanded(
                 flex: 3,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: width / 25),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(width / 5),
-                              bottomRight: Radius.circular(width / 5),
-                            ),
-                            color: AppColors.darkPrimary,
-                          ),
-                          height: 100,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: width,
-                      margin: const EdgeInsets.only(bottom: 16.0),
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.mainColorPrimary.withOpacity(0.5),
-                            spreadRadius: 0,
-                            blurRadius: 20,
-                          ),
-                        ],
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(width / 5),
-                          bottomRight: Radius.circular(width / 5),
-                        ),
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppColors.mainColorSecondary,
-                            AppColors.mainColorPrimary,
-                          ],
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: kToolbarHeight * 2,
-                          ),
-                          getWeatherIcon(state: state, width: width),
-                          const SizedBox(
-                            height: 10 * 2,
-                          ),
-                          DegreeText(
-                            text: state.weatherData?.current?.temp?.toString(),
-                            style: Styles.tsRegularExtraLarge100.copyWith(
-                              color: AppColors.white,
-                            ),
-                            degreeSize: 16,
-                          ),
-                          Text(
-                            state.currentWeather?.main?.toString() ?? 'Unknown',
-                            style: Styles.tsRegularHeadline22.copyWith(
-                              color: AppColors.white,
-                            ),
-                          ),
-                          Text(
-                            formattedDate(
-                                DateTime.now(), DateFormatter.DAY_DATE_MONTH),
-                            style: Styles.tsRegularBodyText.copyWith(
-                              color: AppColors.white38,
-                            ),
-                          ),
-                          const Divider(
-                            color: AppColors.white38,
-                            indent: 20,
-                            endIndent: 20,
-                            thickness: 0.5,
-                          ),
-                          detailsRow(state),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: weatherContent(width, state, cubit),
               ),
               Expanded(
                 child: Container(
                   color: AppColors.transparent,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Today',
+                              style: Styles.tsRegularHeadline22,
+                            ),
+                            TextIconButton(
+                              label: '7 days',
+                              icon: AppIcons.chevron_forward,
+                              padding: const EdgeInsets.only(left: 8),
+                              onTap: () {},
+                              iconSize: 14,
+                              style: Styles.tsRegularBodyText.copyWith(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.white38
+                                    : AppColors.bgColor.withOpacity(0.38),
+                              ),
+                              iconColor: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColors.white38
+                                  : AppColors.bgColor.withOpacity(0.38),
+                            )
+                          ],
+                        ),
+                      ),
+                      const Expanded(child: HourlyListFragment()),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
               )
             ],

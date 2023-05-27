@@ -12,6 +12,8 @@ class AppIcons {
   static const IconData wind = CupertinoIcons.wind_snow;
   static const IconData humidity = CupertinoIcons.drop;
   static const IconData rain = CupertinoIcons.cloud_drizzle;
+  static const IconData uv = CupertinoIcons.sun_max;
+  static const IconData chevron_forward = CupertinoIcons.chevron_forward;
 }
 
 class WeatherIcons {

@@ -42,4 +42,50 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setLatLon(lat, lon) => emit(state.copyWith(lat: lat, lon: lon));
+
+  void onHourlyItemTap(int index) {
+    if (index == state.selectedHourIndex) {
+      emit(
+        state.copyWith(
+          selectedHourIndex: -1,
+          currentWeather: state.weatherData?.current?.weather?.first,
+          selectedHourData: null,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          selectedHourIndex: index,
+          currentWeather: state.weatherData?.hourly?[index].weather?.first,
+          selectedHourData: state.weatherData?.hourly?[index],
+        ),
+      );
+    }
+  }
+
+
+  String getWindSpeed() {
+    return '${(state.selectedHourIndex >= 0 ? state.selectedHourData?.windSpeed : state.weatherData?.current?.windSpeed) ?? ''}'
+        ' m/s';
+  }
+
+  String? getTemp() {
+    return state.selectedHourIndex >= 0
+        ? state.selectedHourData?.temp?.toString()
+        : state.weatherData?.current?.temp?.toString();
+  }
+
+  String getHumidity() {
+    return '${(state.selectedHourIndex >= 0 ? state.selectedHourData?.humidity : state.weatherData?.current?.humidity) ?? ''}'
+        '%';
+  }
+
+  String getRainPop() {
+    return '${((state.selectedHourData?.pop) ?? 0) * 100}%';
+  }
+
+  String getUVI() {
+    return (state.weatherData?.current?.uvi?.toString()) ?? '';
+  }
+
 }

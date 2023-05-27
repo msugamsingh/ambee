@@ -8,6 +8,10 @@ class HomeState extends Equatable {
   final String location;
   final double lat;
   final double lon;
+  final int selectedHourIndex;
+  final Hourly? selectedHourData;
+  final Daily? selectedDailyData;
+  final int selectedDailyIndex;
 
   const HomeState({
     this.isLoading = false,
@@ -17,6 +21,10 @@ class HomeState extends Equatable {
     this.location = 'Banglore',
     this.lat = 12.97,
     this.lon = 77.59,
+    this.selectedHourIndex = -1,
+    this.selectedDailyIndex = -1,
+    this.selectedDailyData,
+    this.selectedHourData,
   });
 
   HomeState copyWith({
@@ -27,6 +35,10 @@ class HomeState extends Equatable {
     double? lon,
     String? error,
     WeatherData? weatherData,
+    int? selectedHourIndex,
+    int? selectedDailyIndex,
+    Hourly? selectedHourData,
+    Daily? selectedDailyData,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -36,6 +48,10 @@ class HomeState extends Equatable {
       lon: lon ?? this.lon,
       error: error ?? this.error,
       weatherData: weatherData ?? this.weatherData,
+      selectedDailyIndex: selectedDailyIndex ?? this.selectedDailyIndex,
+      selectedHourIndex: selectedHourIndex ?? this.selectedHourIndex,
+      selectedDailyData: selectedDailyData ?? this.selectedDailyData,
+      selectedHourData: selectedHourData ?? this.selectedHourData,
     );
   }
 
@@ -48,5 +64,9 @@ class HomeState extends Equatable {
         lon,
         error,
         weatherData,
+        selectedDailyIndex,
+        selectedHourIndex,
+        selectedHourData,
+        selectedDailyData,
       ];
 }
