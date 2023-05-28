@@ -113,7 +113,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SplashCubit();
+        return SplashCubit(context);
       },
       child: Scaffold(
         body: Container(
@@ -132,7 +132,6 @@ class SplashPage extends StatelessWidget {
           ),
           child: BlocBuilder<SplashCubit, SplashState>(
             builder: (context, splashState) {
-              context.read<SplashCubit>().fetch(context.read<HomeCubit>());
               if (!splashState.error.isNullOrEmpty) {
                 onError(context: context, message: splashState.error);
               }

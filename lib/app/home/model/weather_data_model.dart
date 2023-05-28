@@ -215,8 +215,8 @@ class Temp {
   });
 
   Temp.fromJson(Map<String, dynamic> json) {
-    min = json['min'];
-    max = json['max'];
+    min = json['min']?.toString().toDouble;
+    max = json['max']?.toString().toDouble;
   }
 
   Map<String, dynamic> toJson() {

@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:ambee/app/home/model/weather_data_model.dart';
 import 'package:ambee/app/home/repo/home_repo.dart';
+import 'package:ambee/data/constants.dart';
 import 'package:ambee/data/network/network_error_messages.dart';
 import 'package:ambee/data/response/repo_response.dart';
 import 'package:ambee/utils/helper/my_logger.dart';
+import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:geocoding/geocoding.dart';
 
 part 'home_state.dart';
@@ -14,8 +20,21 @@ class HomeCubit extends Cubit<HomeState> {
 
   final HomeRepository _repo = HomeRepository();
 
-  Future<void> getWeather(double? lat, double? lon) async {
-    if (state.isLoading) return;
+  final FlutterGooglePlacesSdk _places = FlutterGooglePlacesSdk(GOOGLE_API_KEY);
+
+  final locationController = TextEditingController();
+
+  final PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.CITIES;
+
+  Timer? _debounce;
+
+  Future<void> getWeather(
+    double? lat,
+    double? lon, {
+    bool force = false,
+    bool updateLocation = true,
+  }) async {
+    if (state.isLoading && !force) return;
     emit(
       state.copyWith(isLoading: true, error: null, lat: lat, lon: lon),
     );
@@ -24,9 +43,12 @@ class HomeCubit extends Cubit<HomeState> {
       lat: lat ?? state.lat,
       lon: lon ?? state.lon,
     );
+    List<Placemark>? placemarks;
+    if (updateLocation) {
+      placemarks = await placemarkFromCoordinates(state.lat, state.lon);
+    }
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(state.lat, state.lon);
+    Log.wtf(placemarks);
 
     if (response.error == null && response.data != null) {
       Log.i(response.data?.toJson());
@@ -36,7 +58,8 @@ class HomeCubit extends Cubit<HomeState> {
           error: null,
           currentWeather: response.data?.current?.weather?.first,
           weatherData: response.data,
-          location: placemarks.first.locality ?? 'Unknown',
+          location:
+              updateLocation ? (placemarks?.first.locality ?? 'Unknown') : null,
         ),
       );
     } else {
@@ -50,6 +73,56 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setLatLon(lat, lon) => emit(state.copyWith(lat: lat, lon: lon));
+
+  void offPredictLoading() => emit(state.copyWith(loadingPredictions: false));
+
+  void cancelDebounce() => _debounce?.cancel();
+
+  void predict(String s) async {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (s.isNullOrEmpty) {
+        emit(state.copyWith(
+            locationPredictions: const [], loadingPredictions: false));
+        return;
+      }
+      try {
+        final result = await _places.findAutocompletePredictions(
+          s,
+          countries: ['in'],
+          placeTypeFilter: _placeTypeFilter,
+          newSessionToken: false,
+        );
+        emit(
+          state.copyWith(
+            locationPredictions: result.predictions,
+            loadingPredictions: false,
+          ),
+        );
+      } catch (e) {
+        Log.e(e);
+      } finally {
+        emit(state.copyWith(loadingPredictions: false));
+      }
+    });
+    emit(state.copyWith(loadingPredictions: true));
+  }
+
+  Future<void> onPredictionSelect(String title) async {
+    if (title.isNullOrEmpty) return;
+    // location from prediction
+    String locality = title.split(',').first;
+    emit(state.copyWith(location: locality, isLoading: true));
+    List<Location> locations = await locationFromAddress(title);
+    final Location location = locations.first;
+    await getWeather(
+      location.latitude,
+      location.longitude,
+      force: true,
+      updateLocation: false,
+    );
+    locationController.text = '';
+  }
 
   void onHourlyItemTap(int index) {
     if (index == state.selectedHourIndex) {

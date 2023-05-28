@@ -12,6 +12,8 @@ class HomeState extends Equatable {
   final Hourly? selectedHourData;
   final Daily? selectedDailyData;
   final int selectedDailyIndex;
+  final List<AutocompletePrediction> locationPredictions;
+  final bool loadingPredictions;
 
   const HomeState({
     this.isLoading = false,
@@ -25,6 +27,8 @@ class HomeState extends Equatable {
     this.selectedDailyIndex = -1,
     this.selectedDailyData,
     this.selectedHourData,
+    this.locationPredictions = const [],
+    this.loadingPredictions = false,
   });
 
   HomeState copyWith({
@@ -39,6 +43,8 @@ class HomeState extends Equatable {
     int? selectedDailyIndex,
     Hourly? selectedHourData,
     Daily? selectedDailyData,
+    List<AutocompletePrediction>? locationPredictions,
+    bool? loadingPredictions,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -52,6 +58,8 @@ class HomeState extends Equatable {
       selectedHourIndex: selectedHourIndex ?? this.selectedHourIndex,
       selectedDailyData: selectedDailyData ?? this.selectedDailyData,
       selectedHourData: selectedHourData ?? this.selectedHourData,
+      locationPredictions: locationPredictions ?? this.locationPredictions,
+      loadingPredictions: loadingPredictions ?? this.loadingPredictions,
     );
   }
 
@@ -68,5 +76,7 @@ class HomeState extends Equatable {
         selectedHourIndex,
         selectedHourData,
         selectedDailyData,
+        locationPredictions,
+        loadingPredictions,
       ];
 }

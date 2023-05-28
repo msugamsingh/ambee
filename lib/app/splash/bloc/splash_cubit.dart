@@ -8,7 +8,10 @@ import 'package:geolocator/geolocator.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
-  SplashCubit() : super(const SplashState());
+  SplashCubit(this.context) : super(const SplashState()) {
+    fetch(context.read<HomeCubit>());
+  }
+  final BuildContext context;
 
   // Future<void> _checkService() async {
   //   final serviceEnabledResult = await isGPSEnabled();
@@ -87,7 +90,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   void navigateToHome(context, homeState) {
     if (!homeState.isLoading && homeState.error == null) {
-      Navigator.pushNamed(context, Routes.home);
+      Navigator.popAndPushNamed(context, Routes.home);
       emit(state.copyWith(listen: false));
     } else if (homeState.error != null) {
       emit(state.copyWith(listen: false, error: homeState.error));

@@ -1,5 +1,7 @@
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page_hourly_list.dart';
+import 'package:ambee/app/home/ui/show_location_bottomsheet.dart';
+import 'package:ambee/app/home/widget/location_field_bottomsheet.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
@@ -7,6 +9,7 @@ import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
+import 'package:ambee/utils/widgets/loading_util.dart';
 import 'package:ambee/utils/widgets/text_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  AppBar appBar(BuildContext context) {
+  AppBar appBar(BuildContext context, HomeState state, HomeCubit cubit) {
     return AppBar(
       centerTitle: true,
       leading: IconButton(
@@ -23,16 +26,22 @@ class HomePage extends StatelessWidget {
           Navigator.of(context).pushNamed(Routes.splash);
         },
       ),
-      title: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            AppIcons.location,
-            size: 20,
-          ),
-          Text('Banglore'),
-        ],
+      title: GestureDetector(
+        onTap: () {
+          cubit.offPredictLoading();
+          kAppShowModalBottomSheet(context, const LocationBottomSheet());
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              AppIcons.location,
+              size: 20,
+            ),
+            Text(state.location),
+          ],
+        ),
       ),
       actions: [
         IconButton(
@@ -191,9 +200,17 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (c, state) {
         var cubit = c.read<HomeCubit>();
+        if (state.isLoading && !LoadingUtil.isOnDisplay) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            LoadingUtil.showLoader(context);
+          });
+        } else if (!state.isLoading) {
+          LoadingUtil.hideLoader();
+        }
         return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: appBar(context),
+          resizeToAvoidBottomInset: false,
+          appBar: appBar(c, state, cubit),
           body: Column(
             children: [
               Expanded(
@@ -216,7 +233,7 @@ class HomePage extends StatelessWidget {
                             ),
                             TextIconButton(
                               label: '7 days',
-                              icon: AppIcons.chevron_forward,
+                              icon: AppIcons.chevronForward,
                               padding: const EdgeInsets.only(left: 8),
                               onTap: () {},
                               iconSize: 14,
