@@ -45,7 +45,7 @@ class SplashPage extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: GestureDetector(
-              onTap:             context.read<ThemeCubit>().changeTheme,
+              onTap: context.read<ThemeCubit>().changeTheme,
               child: Container(
                 padding: const EdgeInsets.all(18),
                 height: MediaQuery.sizeOf(context).width / 1.5,
@@ -112,7 +112,9 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SplashCubit(),
+      create: (context) {
+        return SplashCubit();
+      },
       child: Scaffold(
         body: Container(
           height: MediaQuery.of(context).size.height,
@@ -130,6 +132,7 @@ class SplashPage extends StatelessWidget {
           ),
           child: BlocBuilder<SplashCubit, SplashState>(
             builder: (context, splashState) {
+              context.read<SplashCubit>().fetch(context.read<HomeCubit>());
               if (!splashState.error.isNullOrEmpty) {
                 onError(context: context, message: splashState.error);
               }
