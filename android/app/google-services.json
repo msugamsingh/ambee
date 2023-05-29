@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287749189245",
+    "project_id": "ambeeweather",
+    "storage_bucket": "ambeeweather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287749189245:android:2c04af627675b405f7cb14",
+        "android_client_info": {
+          "package_name": "com.ambee.ambee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3fTg9anBE5tx1_8GZ2jPpj12oigZDwuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

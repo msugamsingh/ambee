@@ -14,8 +14,8 @@ Future kAppShowModalBottomSheet(
   return showModalBottomSheet(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(64),
-        topRight: Radius.circular(64),
+        topLeft: Radius.circular(50),
+        topRight: Radius.circular(50),
       ),
     ),
     clipBehavior: Clip.antiAliasWithSaveLayer,
