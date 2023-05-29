@@ -5,10 +5,12 @@ import 'package:ambee/app/home/repo/home_repo.dart';
 import 'package:ambee/data/constants.dart';
 import 'package:ambee/data/network/network_error_messages.dart';
 import 'package:ambee/data/response/repo_response.dart';
+import 'package:ambee/services/firebase_dynamic_link_services.dart';
 import 'package:ambee/utils/helper/my_logger.dart';
 import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:geocoding/geocoding.dart';
@@ -16,7 +18,9 @@ import 'package:geocoding/geocoding.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(const HomeState());
+  HomeCubit() : super(const HomeState()) {
+    FirebaseDynamicLinkServices.onReceiveDynamicLink(_onReceiveLink);
+  }
 
   final HomeRepository _repo = HomeRepository();
 
@@ -27,6 +31,25 @@ class HomeCubit extends Cubit<HomeState> {
   final PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.CITIES;
 
   Timer? _debounce;
+
+  void _onReceiveLink(PendingDynamicLinkData pendingDynamicLinkData) {
+    if (pendingDynamicLinkData != null) {
+      final Uri deepLink = pendingDynamicLinkData.link;
+      // https://aeweather.page.link/?link=https://www.getambee.com?lat=12.97&lon=77.59&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
+
+      Log.wtf(deepLink);
+      Log.wtf(deepLink.data.toString());
+      Log.wtf(deepLink.queryParameters);
+      final double? lat = double.tryParse(deepLink.queryParameters['lat'] ??
+          deepLink.queryParameters['latitude'] ??
+          '');
+      final double? lon = double.tryParse(deepLink.queryParameters['lon'] ??
+          deepLink.queryParameters['longitude'] ??
+          '');
+      Log.wtf((lat, lon));
+      getWeather(lat, lon, force: true);
+    }
+  }
 
   Future<void> getWeather(
     double? lat,
