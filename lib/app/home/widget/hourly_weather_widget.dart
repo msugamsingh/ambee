@@ -46,7 +46,7 @@ class HourlyWeather extends StatelessWidget {
               border: Border.all(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? AppColors.white38
-                    : AppColors.bgColor.withOpacity(0.38),
+                    : AppColors.bgColor38,
               ),
               gradient: selected
                   ? const LinearGradient(

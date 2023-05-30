@@ -168,12 +168,12 @@ class HomePage extends StatelessWidget {
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? AppColors.white38
-                                    : AppColors.bgColor.withOpacity(0.38),
+                                    : AppColors.bgColor38,
                               ),
                               iconColor: Theme.of(context).brightness ==
                                       Brightness.dark
                                   ? AppColors.white38
-                                  : AppColors.bgColor.withOpacity(0.38),
+                                  : AppColors.bgColor38,
                             )
                           ],
                         ),

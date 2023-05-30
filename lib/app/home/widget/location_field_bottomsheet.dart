@@ -34,7 +34,7 @@ class LocationBottomSheet extends StatelessWidget {
                 return Divider(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.white38
-                      : AppColors.bgColor.withOpacity(0.38),
+                      : AppColors.bgColor38,
                   indent: 20,
                   endIndent: 20,
                   thickness: 0.5,
@@ -84,7 +84,7 @@ class LocationBottomSheet extends StatelessWidget {
                       size: 28,
                       color: Theme.of(context).brightness == Brightness.dark
                           ? AppColors.white38
-                          : AppColors.bgColor.withOpacity(0.38),
+                          : AppColors.bgColor38,
                     ),
                   )
                 ],

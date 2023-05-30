@@ -104,18 +104,14 @@ class DailyData extends StatelessWidget {
                       Text(
                         '/',
                         style: Styles.tsRegularBold16.copyWith(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.white38
-                                    : AppColors.bgColor.withOpacity(0.38)),
+                          color: AppColors.white38,
+                        ),
                       ),
                       DegreeText(
                         text:
                             "${state.weatherData?.daily?.first.temp?.min ?? 0}",
                         degreeSize: 6,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.white38
-                            : AppColors.bgColor.withOpacity(0.38),
+                        color: AppColors.white38,
                         style: Styles.tsRegularBold16,
                       ),
                     ],
@@ -126,9 +122,7 @@ class DailyData extends StatelessWidget {
                   Text(
                     state.currentWeather?.main?.toString() ?? 'Unknown',
                     style: Styles.tsRegularBodyText.copyWith(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.white38
-                          : AppColors.bgColor.withOpacity(0.38),
+                      color: AppColors.white38,
                     ),
                   ),
                 ],
@@ -173,7 +167,7 @@ class DailyData extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).brightness == Brightness.dark
                           ? AppColors.white38
-                          : AppColors.bgColor.withOpacity(0.38),
+                          : AppColors.bgColor38,
                     ),
                   ),
                 ],
@@ -189,7 +183,7 @@ class DailyData extends StatelessWidget {
               style: TextStyle(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? AppColors.white38
-                    : AppColors.bgColor.withOpacity(0.38),
+                    : AppColors.bgColor38,
               ),
             ),
             trailing: Row(
@@ -209,7 +203,7 @@ class DailyData extends StatelessWidget {
                   style: Styles.tsRegularBold14.copyWith(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.white38
-                        : AppColors.bgColor.withOpacity(0.38),
+                        : AppColors.bgColor38,
                   ),
                 ),
                 DegreeText(
@@ -218,7 +212,7 @@ class DailyData extends StatelessWidget {
                   style: Styles.tsRegularBold14,
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.white38
-                      : AppColors.bgColor.withOpacity(0.38),
+                      : AppColors.bgColor38,
                   degreeSize: 5,
                 )
               ],

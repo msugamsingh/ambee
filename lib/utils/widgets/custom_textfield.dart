@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
             width: 0.5,
             color: Theme.of(context).brightness == Brightness.dark
                 ? AppColors.white38
-                : AppColors.bgColor.withOpacity(0.38),
+                : AppColors.bgColor38,
           ),
           borderRadius: BorderRadius.circular(
             14.0,

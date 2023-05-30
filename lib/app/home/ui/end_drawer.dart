@@ -16,6 +16,7 @@ class EndDrawer extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 12),
       onTap: () {
+        Navigator.pop(context);
         Navigator.pushNamed(context, Routes.addUser);
       },
       leading: const Icon(
