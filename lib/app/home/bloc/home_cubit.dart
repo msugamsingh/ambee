@@ -28,17 +28,23 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
+  // Timer object for periodic weather data updates
   Timer? timer;
+
+  // Repository for weather data
   final HomeRepository _repo = HomeRepository();
 
+  // Google Places SDK instance for location prediction
   final FlutterGooglePlacesSdk _places = FlutterGooglePlacesSdk(GOOGLE_API_KEY);
 
   final locationController = TextEditingController();
 
   final PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.CITIES;
 
+  // Timer for debouncing location prediction requests
   Timer? _debounce;
 
+  // Method: Handles dynamic link data received by the app
   void _onReceiveLink(PendingDynamicLinkData pendingDynamicLinkData) {
     if (pendingDynamicLinkData != null) {
       final Uri deepLink = pendingDynamicLinkData.link;
@@ -58,6 +64,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  // Method: Retrieves weather data based on the provided latitude and longitude
   Future<void> getWeather(
     double? lat,
     double? lon, {
@@ -66,6 +73,8 @@ class HomeCubit extends Cubit<HomeState> {
     bool silent = false, // fetch data without triggering the loading state
   }) async {
     if (state.isLoading && !force) return;
+
+    // not setting isLoading to true if a method is silent
     emit(
       state.copyWith(
           isLoading: !silent && true, error: null, lat: lat, lon: lon),
@@ -76,6 +85,9 @@ class HomeCubit extends Cubit<HomeState> {
       lon: lon ?? state.lon,
     );
     List<Placemark>? placemarks;
+
+    // updating location from coordinates only if updateLocation is true;
+    // not updating location label if its selected from prediction list
     if (updateLocation) {
       placemarks = await placemarkFromCoordinates(state.lat, state.lon);
     }
@@ -84,6 +96,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (response.error == null && response.data != null) {
       Log.i(response.data?.toJson());
+
+      // emit the fetched data
       emit(
         state.copyWith(
           isLoading: false,
@@ -106,25 +120,34 @@ class HomeCubit extends Cubit<HomeState> {
 
   void setLatLon(lat, lon) => emit(state.copyWith(lat: lat, lon: lon));
 
+  // Method: Disables loading predictions state in the state
   void offPredictLoading() => emit(state.copyWith(loadingPredictions: false));
 
   void cancelDebounce() => _debounce?.cancel();
 
+  // Method: Predicts locations based on the provided query string
   void predict(String s) async {
+    // added a debouncer to handle the multi-calls on changing of query
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       if (s.isNullOrEmpty) {
-        emit(state.copyWith(
-            locationPredictions: const [], loadingPredictions: false));
+        emit(
+          state.copyWith(
+              locationPredictions: const [], loadingPredictions: false),
+        );
         return;
       }
       try {
+
+        // finding cities based on the query
         final result = await _places.findAutocompletePredictions(
           s,
           countries: ['in'],
           placeTypeFilter: _placeTypeFilter,
           newSessionToken: false,
         );
+
+        // updating the results
         emit(
           state.copyWith(
             locationPredictions: result.predictions,
@@ -137,26 +160,36 @@ class HomeCubit extends Cubit<HomeState> {
         emit(state.copyWith(loadingPredictions: false));
       }
     });
+
+    // loading state to show the CPI
     emit(state.copyWith(loadingPredictions: true));
   }
 
+  // Method: Handles the selection of a location prediction
   Future<void> onPredictionSelect(String title) async {
     if (title.isNullOrEmpty) return;
     // location from prediction
     String locality = title.split(',').first;
     emit(state.copyWith(location: locality, isLoading: true));
+
+    // locations based on the selected address/prediction
     List<Location> locations = await locationFromAddress(title);
     final Location location = locations.first;
+
     await getWeather(
       location.latitude,
       location.longitude,
       force: true,
       updateLocation: false,
     );
+
+    // setting the controller to empty once done fetching
     locationController.text = '';
   }
 
+  // method: show the weather data from the selected hourly widget
   void onHourlyItemTap(int index) {
+    // toggle from hourly to current, vice-versa
     if (index == state.selectedHourIndex) {
       emit(
         state.copyWith(
@@ -176,34 +209,39 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  // Method: Retrieves the wind speed based on the selected hourly item or current weather data
   String getWindSpeed() {
     return '${(state.selectedHourIndex >= 0 ? state.selectedHourData?.windSpeed : state.weatherData?.current?.windSpeed) ?? ''}'
         ' m/s';
   }
 
+  // Method: Retrieves the temperature based on the selected hourly item or current weather data
   String? getTemp() {
     return state.selectedHourIndex >= 0
         ? state.selectedHourData?.temp?.toString()
         : state.weatherData?.current?.temp?.toString();
   }
 
+  // Method: Retrieves the humidity based on the selected hourly item or current weather data
   String getHumidity() {
     return '${(state.selectedHourIndex >= 0 ? state.selectedHourData?.humidity : state.weatherData?.current?.humidity) ?? ''}'
         '%';
   }
 
+  // Method: Retrieves the rain probability based on the selected hourly item or current weather data
   String getRainPop() {
     return '${((state.selectedHourData?.pop) ?? 0) * 100}%';
   }
-
+  // Method: Retrieves the UV index based on the current weather data
   String getUVI() {
     return (state.weatherData?.current?.uvi?.toString()) ?? '';
   }
 
-  getLocation() async {
+  // Method: Retrieves the current location name based on the latitude and longitude in the state
+  Future<String> getLocation() async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(state.lat, state.lon);
-    return placemarks.first.name ?? 'unknow';
+    return placemarks.first.name ?? 'unknown';
   }
 
   @override

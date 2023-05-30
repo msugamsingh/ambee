@@ -2,6 +2,7 @@ import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:flutter/material.dart';
 
+// Widget to show a specific weather detail with icon
 class WeatherDetailItem extends StatelessWidget {
   final IconData icon;
   final String label;

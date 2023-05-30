@@ -9,6 +9,7 @@ import 'package:ambee/utils/widgets/get_weather_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Drawer which contains settings for app
 class EndDrawer extends StatelessWidget {
   const EndDrawer({Key? key}) : super(key: key);
 

@@ -3,6 +3,7 @@ import 'package:ambee/app/home/widget/hourly_weather_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Hourly Listview for the home page
 class HourlyListFragment extends StatelessWidget {
   const HourlyListFragment({Key? key}) : super(key: key);
 

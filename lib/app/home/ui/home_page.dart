@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
-   HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   AppBar appBar(BuildContext context, HomeState state, HomeCubit cubit) {
     return AppBar(
@@ -52,6 +52,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // method to build details of selected weather
   Widget detailsRow(HomeCubit cubit) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,6 +75,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Selected/Current weather details widget
   Widget weatherContent(double width, HomeState state, HomeCubit cubit) {
     return DoubleStackWidget(
       children: [
@@ -115,7 +117,6 @@ class HomePage extends StatelessWidget {
   }
 
   final globalKey = GlobalKey<ScaffoldState>();
-
 
   @override
   Widget build(BuildContext context) {

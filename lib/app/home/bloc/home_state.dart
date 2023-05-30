@@ -10,10 +10,21 @@ class HomeState extends Equatable {
   final double lon;
   final int selectedHourIndex;
   final Hourly? selectedHourData;
-  final Daily? selectedDailyData;
-  final int selectedDailyIndex;
   final List<AutocompletePrediction> locationPredictions;
   final bool loadingPredictions;
+
+  /// Represents the state of the home screen in the application.
+  ///
+  /// The [isLoading] flag indicates whether the screen is currently loading data.
+  /// The [error] field holds an optional error message if an error occurred during data retrieval.
+  /// The [currentWeather] field represents the current weather.
+  /// The [weatherData] field stores the overall weather data.
+  /// The [location] field holds the location name.
+  /// The [lat] and [lon] fields store the latitude and longitude coordinates.
+  /// The [selectedHourIndex] represents the index of the selected hourly weather data.
+  /// The [selectedHourData] holds the selected hourly weather data.
+  /// The [locationPredictions] field stores a list of location predictions for autocomplete functionality.
+  /// The [loadingPredictions] flag indicates whether location predictions are currently being loaded.
 
   const HomeState({
     this.isLoading = false,
@@ -24,13 +35,13 @@ class HomeState extends Equatable {
     this.lat = 12.97,
     this.lon = 77.59,
     this.selectedHourIndex = -1,
-    this.selectedDailyIndex = -1,
-    this.selectedDailyData,
     this.selectedHourData,
     this.locationPredictions = const [],
     this.loadingPredictions = false,
   });
 
+
+  /// Returns a new [HomeState] object with the updated fields.
   HomeState copyWith({
     bool? isLoading,
     Weather? currentWeather,
@@ -40,9 +51,7 @@ class HomeState extends Equatable {
     String? error,
     WeatherData? weatherData,
     int? selectedHourIndex,
-    int? selectedDailyIndex,
     Hourly? selectedHourData,
-    Daily? selectedDailyData,
     List<AutocompletePrediction>? locationPredictions,
     bool? loadingPredictions,
   }) {
@@ -54,9 +63,7 @@ class HomeState extends Equatable {
       lon: lon ?? this.lon,
       error: error ?? this.error,
       weatherData: weatherData ?? this.weatherData,
-      selectedDailyIndex: selectedDailyIndex ?? this.selectedDailyIndex,
       selectedHourIndex: selectedHourIndex ?? this.selectedHourIndex,
-      selectedDailyData: selectedDailyData ?? this.selectedDailyData,
       selectedHourData: selectedHourData ?? this.selectedHourData,
       locationPredictions: locationPredictions ?? this.locationPredictions,
       loadingPredictions: loadingPredictions ?? this.loadingPredictions,
@@ -72,10 +79,8 @@ class HomeState extends Equatable {
         lon,
         error,
         weatherData,
-        selectedDailyIndex,
         selectedHourIndex,
         selectedHourData,
-        selectedDailyData,
         locationPredictions,
         loadingPredictions,
       ];

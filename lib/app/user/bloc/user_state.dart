@@ -1,8 +1,13 @@
 part of 'user_cubit.dart';
 
 class UserState extends Equatable {
+  /// The current user if exists.
   final User? user;
+
+  /// Error message related to the user's name.
   final String? nameErrorMsg;
+
+  /// Error message related to the user's email.
   final String? emailErrorMsg;
 
   const UserState({

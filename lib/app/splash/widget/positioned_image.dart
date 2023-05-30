@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget which can set image outside of the screen without overflow
 class PositionedImage extends StatelessWidget {
   const PositionedImage({Key? key}) : super(key: key);
 

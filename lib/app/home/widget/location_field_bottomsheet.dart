@@ -6,9 +6,11 @@ import 'package:ambee/utils/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Bottomsheet to search and select city for the weather
 class LocationBottomSheet extends StatelessWidget {
   const LocationBottomSheet({Key? key}) : super(key: key);
 
+  // shows list if data is available else CPI
   Widget _showPredictionList(HomeCubit cubit, HomeState state) {
     return state.loadingPredictions
         ? const Expanded(

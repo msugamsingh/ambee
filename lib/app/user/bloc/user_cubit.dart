@@ -9,12 +9,14 @@ part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit() : super(const UserState()) {
+    // Getting user when initialising
     getUser();
   }
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
 
+  // Method: retrieve user from local storage
   void getUser() {
     User? user = Storage.getUser();
     if (user != null) {
@@ -24,6 +26,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  // Method: check if fields are OK before saving
   bool isValidated() {
     String? nameErr;
     String? emailErr;
@@ -46,6 +49,7 @@ class UserCubit extends Cubit<UserState> {
     return true;
   }
 
+  // Method: Saves user in local storage
   void saveUser() {
     User user = User(
       name: nameController.text.trim(),

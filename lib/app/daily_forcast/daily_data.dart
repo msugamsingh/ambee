@@ -10,6 +10,7 @@ import 'package:ambee/utils/widgets/get_weather_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Page to show the weather data for 8 upcoming days
 class DailyData extends StatelessWidget {
   const DailyData({Key? key}) : super(key: key);
 
@@ -39,6 +40,7 @@ class DailyData extends StatelessWidget {
     );
   }
 
+  // Other weather details for tomorrow
   Widget detailsRow(HomeCubit cubit) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,6 +69,7 @@ class DailyData extends StatelessWidget {
     );
   }
 
+  // Complete weather details for tomorrow
   Widget weatherContent(
       double width, HomeState state, HomeCubit cubit, BuildContext context) {
     return DoubleStackWidget(
@@ -142,6 +145,7 @@ class DailyData extends StatelessWidget {
     );
   }
 
+  // List for 8 days weather details
   Widget dailyList(BuildContext context, HomeCubit cubit, double width) {
     return SingleChildScrollView(
       child: Column(

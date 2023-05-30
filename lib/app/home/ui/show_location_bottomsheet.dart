@@ -2,6 +2,8 @@ import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// call to show any bottomsheet, contains predefined style and properties
+// for bottomsheet
 Future kAppShowModalBottomSheet(
   BuildContext context,
   Widget content, {
@@ -40,6 +42,7 @@ Future kAppShowModalBottomSheet(
         if (whenComplete != null) {
           whenComplete();
         } else {
+          // cancelling debounce on home cubit when closes the bottomsheet
           BlocProvider.of<HomeCubit>(context).cancelDebounce();
         }
       }

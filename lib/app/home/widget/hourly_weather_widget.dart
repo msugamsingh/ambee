@@ -6,6 +6,7 @@ import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
 import 'package:flutter/material.dart';
 
+// Animated Widget for Hourly bottom list
 class HourlyWeather extends StatelessWidget {
   final bool selected;
   final Hourly? hourly;
@@ -16,6 +17,7 @@ class HourlyWeather extends StatelessWidget {
     required this.hourly,
   }) : super(key: key);
 
+  // gets icon from assets according to name
   Widget getIcon(context) {
     if (hourly?.weather?.first != null && hourly?.weather?.first.icon != null) {
       return Image.asset(

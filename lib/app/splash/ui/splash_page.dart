@@ -15,6 +15,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
 
+  // positioned image to get image out of the screen for a better UI
   Widget positionedImage({
     required String image,
     double? left,
@@ -36,6 +37,7 @@ class SplashPage extends StatelessWidget {
     );
   }
 
+  // shows different loader according to state
   Widget loadingCard(BuildContext context, SplashState state) {
     return Positioned.fill(
       child: Align(

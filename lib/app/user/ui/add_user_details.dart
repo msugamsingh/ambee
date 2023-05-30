@@ -4,6 +4,8 @@ import 'package:ambee/utils/widgets/double_block_stack_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
+// Widget to save user name and email locally
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
