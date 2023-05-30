@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 
 class DoubleStackWidget extends StatelessWidget {
   final List<Widget> children;
-  const DoubleStackWidget({Key? key, required this.children}) : super(key: key);
+  final CrossAxisAlignment? crossAxisAlignment;
+  final MainAxisAlignment? mainAxisAlignment;
+
+  const DoubleStackWidget(
+      {Key? key,
+      required this.children,
+      this.crossAxisAlignment,
+      this.mainAxisAlignment})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +61,8 @@ class DoubleStackWidget extends StatelessWidget {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
+            mainAxisAlignment: mainAxisAlignment ??  MainAxisAlignment.spaceBetween,
             children: children,
           ),
         ),

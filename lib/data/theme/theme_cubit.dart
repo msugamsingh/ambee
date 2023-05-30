@@ -12,7 +12,6 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   void changeTheme() {
-    print(state.darkTheme);
     if (state.darkTheme) {
       Storage.setTheme(false);
       emit(state.copyWith(darkTheme: false, theme: AppTheme.lightTheme));

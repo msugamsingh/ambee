@@ -54,7 +54,7 @@ class Styles {
     fontSize: 14.0,
   );
   static const TextStyle tsLight12 = TextStyle(
-    fontWeight: FontWeight.w200,
+    fontWeight: FontWeight.w300,
     fontSize: 12.0,
   );
   static const TextStyle tsRegularLight12 = TextStyle(

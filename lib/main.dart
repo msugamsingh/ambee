@@ -2,6 +2,8 @@ import 'package:ambee/app/daily_forcast/daily_data.dart';
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page.dart';
 import 'package:ambee/app/splash/ui/splash_page.dart';
+import 'package:ambee/app/user/bloc/user_cubit.dart';
+import 'package:ambee/app/user/ui/add_user_details.dart';
 import 'package:ambee/data/env.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/app_theme.dart';
@@ -52,6 +54,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) => HomeCubit(),
         ),
+        BlocProvider(
+          create: (BuildContext context) => UserCubit(),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
@@ -62,8 +67,9 @@ class MyApp extends StatelessWidget {
             initialRoute: Routes.splash,
             routes: {
               Routes.splash: (context) => const SplashPage(),
-              Routes.home: (context) => const HomePage(),
+              Routes.home: (context) =>  HomePage(),
               Routes.daily: (context) => const DailyData(),
+              Routes.addUser: (context) =>  const UserPage(),
             },
           );
         },

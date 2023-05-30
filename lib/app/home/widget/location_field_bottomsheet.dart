@@ -2,6 +2,7 @@ import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
+import 'package:ambee/utils/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,31 +90,13 @@ class LocationBottomSheet extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                height: kTextTabBarHeight,
-                child: TextField(
-                  controller: context.read<HomeCubit>().locationController,
-                  decoration: InputDecoration(
-                    label: const Text('Location'),
-                    hintText: 'Delhi',
-                    contentPadding: const EdgeInsets.all(
-                      20,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 0.5,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.white38
-                            : AppColors.bgColor.withOpacity(0.38),
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        14.0,
-                      ),
-                    ),
-                  ),
-                  autofocus: true,
-                  onChanged: cubit.predict,
-                ),
+              CustomTextField(
+                controller: context.read<HomeCubit>().locationController,
+                label: 'Location',
+                maxLength: 60,
+                maxLines: 1,
+                hint: 'Enter a city name',
+                onChanged: cubit.predict,
               ),
               const SizedBox(height: 8),
               _showPredictionList(cubit, state),

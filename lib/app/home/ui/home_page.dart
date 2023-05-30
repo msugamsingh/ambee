@@ -1,11 +1,11 @@
 import 'package:ambee/app/home/bloc/home_cubit.dart';
+import 'package:ambee/app/home/ui/end_drawer.dart';
 import 'package:ambee/app/home/ui/home_page_hourly_list.dart';
 import 'package:ambee/app/home/ui/show_location_bottomsheet.dart';
 import 'package:ambee/app/home/widget/location_field_bottomsheet.dart';
 import 'package:ambee/app/home/widget/weather_detail_item_widget.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
-import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
@@ -18,17 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+   HomePage({Key? key}) : super(key: key);
 
   AppBar appBar(BuildContext context, HomeState state, HomeCubit cubit) {
     return AppBar(
       centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(AppIcons.boltCircular),
-        onPressed: () {
-          Navigator.of(context).pushNamed(Routes.splash);
-        },
-      ),
       title: GestureDetector(
         onTap: () {
           cubit.offPredictLoading();
@@ -50,7 +44,8 @@ class HomePage extends StatelessWidget {
         IconButton(
           icon: const Icon(AppIcons.threeDotsMenu),
           onPressed: () {
-            context.read<ThemeCubit>().changeTheme();
+            // context.read<ThemeCubit>().changeTheme();
+            globalKey.currentState!.openEndDrawer();
           },
         ),
       ],
@@ -119,6 +114,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  final globalKey = GlobalKey<ScaffoldState>();
+
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.sizeOf(context).width;
@@ -133,8 +131,10 @@ class HomePage extends StatelessWidget {
           LoadingUtil.hideLoader();
         }
         return Scaffold(
+          key: globalKey,
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
+          endDrawer: const EndDrawer(),
           appBar: appBar(context, state, cubit),
           body: Column(
             children: [
