@@ -11,4 +11,5 @@ class DateFormatter {
   static const DATE_MON_YEAR = 'dd-MM-yyyy';
   static const HOUR24 = 'H';
   static const HOUR24_MINUTE = 'Hm';
+  static const SHORT_DAY = 'EEE';
 }

@@ -2,6 +2,7 @@ import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page_hourly_list.dart';
 import 'package:ambee/app/home/ui/show_location_bottomsheet.dart';
 import 'package:ambee/app/home/widget/location_field_bottomsheet.dart';
+import 'package:ambee/app/home/widget/weather_detail_item_widget.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
@@ -9,6 +10,8 @@ import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
+import 'package:ambee/utils/widgets/double_block_stack_widget.dart';
+import 'package:ambee/utils/widgets/get_weather_icon_widget.dart';
 import 'package:ambee/utils/widgets/loading_util.dart';
 import 'package:ambee/utils/widgets/text_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -54,141 +57,64 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget getWeatherIcon({required HomeState state, required double width}) {
-    if (state.currentWeather != null && state.currentWeather!.icon != null) {
-      return Image.asset(
-        WeatherIcons.getWeatherIcon(state.currentWeather!.icon!),
-        width: width / 1.5,
-        height: width / 2,
-        fit: BoxFit.fitHeight,
-      );
-    } else {
-      return SizedBox(height: width / 1.5);
-    }
-  }
-
-  Widget detailRowItem(IconData icon, String value, String label) {
-    return SizedBox(
-      width: 80,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: AppColors.white,
-          ),
-          Text(
-            value,
-            textAlign: TextAlign.center,
-            style: Styles.tsRegularLight12.copyWith(color: AppColors.white),
-          ),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: Styles.tsRegularLight12.copyWith(color: AppColors.white38),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget detailsRow(HomeCubit cubit) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        detailRowItem(AppIcons.wind, cubit.getWindSpeed(), 'Wind'),
-        detailRowItem(AppIcons.humidity, cubit.getHumidity(), 'Humidity'),
+        WeatherDetailItem(
+            icon: AppIcons.wind, value: cubit.getWindSpeed(), label: 'Wind'),
+        WeatherDetailItem(
+            icon: AppIcons.humidity,
+            value: cubit.getHumidity(),
+            label: 'Humidity'),
         (cubit.state.selectedHourIndex >= 0)
-            ? detailRowItem(AppIcons.rain, cubit.getRainPop(), 'Chances')
-            : detailRowItem(AppIcons.uv, cubit.getUVI(), 'UV'),
+            ? WeatherDetailItem(
+                icon: AppIcons.rain,
+                value: cubit.getRainPop(),
+                label: 'Chances')
+            : WeatherDetailItem(
+                icon: AppIcons.uv, value: cubit.getUVI(), label: 'UV')
       ],
     );
   }
 
   Widget weatherContent(double width, HomeState state, HomeCubit cubit) {
-    return Stack(
+    return DoubleStackWidget(
       children: [
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: width / 25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(width / 5),
-                  bottomRight: Radius.circular(width / 5),
-                ),
-                color: AppColors.darkPrimary,
-              ),
-              height: 100,
-            ),
+        const Spacer(),
+        GetWeatherIcon(
+          name: state.currentWeather?.icon,
+          width: width / 1.5,
+          height: width / 2,
+        ),
+        DegreeText(
+          text: cubit.getTemp(),
+          style: Styles.tsRegularExtraLarge72.copyWith(
+            color: AppColors.white,
+          ),
+          degreeSize: 16,
+        ),
+        Text(
+          state.currentWeather?.main?.toString() ?? 'Unknown',
+          style: Styles.tsRegularMidHeadline18.copyWith(
+            color: AppColors.white,
           ),
         ),
-        Container(
-          width: width,
-          margin: const EdgeInsets.only(bottom: 16.0),
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.mainColorPrimary.withOpacity(0.5),
-                spreadRadius: 0,
-                blurRadius: 20,
-              ),
-            ],
-            border: Border.all(color: AppColors.mainColorSecondary, width: 0.5),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(width / 5),
-              bottomRight: Radius.circular(width / 5),
-            ),
-            gradient: const LinearGradient(
-              colors: [
-                AppColors.mainColorSecondary,
-                AppColors.mainColorPrimary,
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Spacer(),
-              getWeatherIcon(state: state, width: width),
-              DegreeText(
-                text: cubit.getTemp(),
-                style: Styles.tsRegularExtraLarge72.copyWith(
-                  color: AppColors.white,
-                ),
-                degreeSize: 16,
-              ),
-              Text(
-                state.currentWeather?.main?.toString() ?? 'Unknown',
-                style: Styles.tsRegularMidHeadline18.copyWith(
-                  color: AppColors.white,
-                ),
-              ),
-              Text(
-                formattedDate(DateTime.now(), DateFormatter.DAY_DATE_MONTH),
-                style: Styles.tsRegularBodyText.copyWith(
-                  color: AppColors.white38,
-                ),
-              ),
-              const Spacer(),
-              const Divider(
-                color: AppColors.white38,
-                indent: 20,
-                endIndent: 20,
-                thickness: 0.5,
-              ),
-              detailsRow(cubit),
-            ],
+        Text(
+          formattedDate(DateTime.now(), DateFormatter.DAY_DATE_MONTH),
+          style: Styles.tsRegularBodyText.copyWith(
+            color: AppColors.white38,
           ),
         ),
+        const Spacer(),
+        const Divider(
+          color: AppColors.white38,
+          indent: 20,
+          endIndent: 20,
+          thickness: 0.5,
+        ),
+        detailsRow(cubit),
       ],
     );
   }
@@ -231,10 +157,12 @@ class HomePage extends StatelessWidget {
                               style: Styles.tsRegularHeadline22,
                             ),
                             TextIconButton(
-                              label: '7 days',
+                              label: '8 days',
                               icon: AppIcons.chevronForward,
                               padding: const EdgeInsets.only(left: 8),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).pushNamed(Routes.daily);
+                              },
                               iconSize: 14,
                               style: Styles.tsRegularBodyText.copyWith(
                                 color: Theme.of(context).brightness ==

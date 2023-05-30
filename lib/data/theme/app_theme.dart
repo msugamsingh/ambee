@@ -16,6 +16,7 @@ class AppTheme {
       titleTextStyle: Styles.tsAppBar,
       elevation: 0,
       centerTitle: true,
+      actionsIconTheme: IconThemeData(color: AppColors.white),
       iconTheme: IconThemeData(color: AppColors.white),
     ),
   );

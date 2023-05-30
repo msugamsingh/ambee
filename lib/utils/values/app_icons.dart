@@ -15,6 +15,8 @@ class AppIcons {
   static const IconData uv = CupertinoIcons.sun_max;
   static const IconData chevronForward = CupertinoIcons.chevron_forward;
   static const IconData clear = CupertinoIcons.clear_circled;
+  static const IconData backButton = CupertinoIcons.chevron_left_circle;
+  static const IconData calendar = CupertinoIcons.calendar;
 }
 
 class WeatherIcons {

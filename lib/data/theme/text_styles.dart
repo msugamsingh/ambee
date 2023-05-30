@@ -28,6 +28,12 @@ class Styles {
     fontWeight: FontWeight.w700,
     fontSize: 22.0,
   );
+
+  static const TextStyle tsRegularHeadline32 = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 32.0,
+  );
+
   static const TextStyle tsRegularHeadline24 = TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 24.0,

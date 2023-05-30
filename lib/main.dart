@@ -1,3 +1,4 @@
+import 'package:ambee/app/daily_forcast/daily_data.dart';
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page.dart';
 import 'package:ambee/app/splash/ui/splash_page.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
             routes: {
               Routes.splash: (context) => const SplashPage(),
               Routes.home: (context) => const HomePage(),
+              Routes.daily: (context) => const DailyData(),
             },
           );
         },
