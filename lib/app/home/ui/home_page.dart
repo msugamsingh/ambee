@@ -59,7 +59,8 @@ class HomePage extends StatelessWidget {
       return Image.asset(
         WeatherIcons.getWeatherIcon(state.currentWeather!.icon!),
         width: width / 1.5,
-        height: width / 1.5,
+        height: width / 2,
+        fit: BoxFit.fitHeight,
       );
     } else {
       return SizedBox(height: width / 1.5);
@@ -154,21 +155,20 @@ class HomePage extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
-                height: kToolbarHeight * 2,
-              ),
+              const Spacer(),
               getWeatherIcon(state: state, width: width),
               DegreeText(
                 text: cubit.getTemp(),
-                style: Styles.tsRegularExtraLarge100.copyWith(
+                style: Styles.tsRegularExtraLarge72.copyWith(
                   color: AppColors.white,
                 ),
                 degreeSize: 16,
               ),
               Text(
                 state.currentWeather?.main?.toString() ?? 'Unknown',
-                style: Styles.tsRegularHeadline22.copyWith(
+                style: Styles.tsRegularMidHeadline18.copyWith(
                   color: AppColors.white,
                 ),
               ),
@@ -186,7 +186,6 @@ class HomePage extends StatelessWidget {
                 thickness: 0.5,
               ),
               detailsRow(cubit),
-              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -198,8 +197,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.sizeOf(context).width;
     return BlocBuilder<HomeCubit, HomeState>(
-      builder: (c, state) {
-        var cubit = c.read<HomeCubit>();
+      builder: (context, state) {
+        var cubit = context.read<HomeCubit>();
         if (state.isLoading && !LoadingUtil.isOnDisplay) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             LoadingUtil.showLoader(context);
@@ -210,7 +209,7 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
-          appBar: appBar(c, state, cubit),
+          appBar: appBar(context, state, cubit),
           body: Column(
             children: [
               Expanded(

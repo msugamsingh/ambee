@@ -15,9 +15,9 @@ class Styles {
     fontSize: 16.0,
   );
 
-  static const TextStyle tsRegularExtraLarge100 = TextStyle(
+  static const TextStyle tsRegularExtraLarge72 = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 100,
+    fontSize: 72,
   );
 
   static const TextStyle tsRegularMidHeadline18 = TextStyle(

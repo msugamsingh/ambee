@@ -10,8 +10,8 @@ class WeatherData {
   WeatherData({this.lat, this.lon, this.current, this.hourly, this.daily});
 
   WeatherData.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = json['lat']?.toString().toDouble;
+    lon = json['lon']?.toString().toDouble;
     current =
         json['current'] != null ? Current.fromJson(json['current']) : null;
     if (json['hourly'] != null) {

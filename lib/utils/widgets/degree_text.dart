@@ -24,7 +24,7 @@ class DegreeText extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: style.fontSize!,
+          height: style.fontSize! * 1.28,
           child: Text(
             text?.substring(0, 2) ?? '',
             textAlign: TextAlign.center,

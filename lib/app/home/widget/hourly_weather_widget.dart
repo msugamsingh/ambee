@@ -16,20 +16,23 @@ class HourlyWeather extends StatelessWidget {
     required this.hourly,
   }) : super(key: key);
 
-  Widget getIcon() {
+  Widget getIcon(context) {
     if (hourly?.weather?.first != null && hourly?.weather?.first.icon != null) {
       return Image.asset(
         WeatherIcons.getWeatherIcon(hourly!.weather!.first.icon!),
-        width: 50,
+        width: MediaQuery.of(context).size.width / 6.5,
       );
     } else {
-      return const SizedBox(height: 50);
+      return SizedBox(height: MediaQuery.of(context).size.width / 6.5);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return hourly == null
+    return hourly == null ||
+            (hourly?.dt != null &&
+                DateTime.now().day !=
+                    DateTime.fromMillisecondsSinceEpoch(hourly!.dt! * 1000).day)
         ? const SizedBox.shrink()
         : AnimatedContainer(
             height: selected ? 120 : 100,
@@ -68,7 +71,7 @@ class HourlyWeather extends StatelessWidget {
                   //     ? AppColors.white
                   //     : AppColors.bgColor,
                 ),
-                getIcon(),
+                getIcon(context),
                 hourly?.dt != null
                     ? Text(
                         formattedDate(
