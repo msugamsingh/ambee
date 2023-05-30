@@ -20,8 +20,15 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState()) {
     FirebaseDynamicLinkServices.onReceiveDynamicLink(_onReceiveLink);
+    timer = Timer.periodic(const Duration(minutes: 10), (_) {
+      if (!state.isLoading) {
+        /// silently updating data in every 5 min
+        getWeather(state.lat, state.lon, silent: true);
+      }
+    });
   }
 
+  Timer? timer;
   final HomeRepository _repo = HomeRepository();
 
   final FlutterGooglePlacesSdk _places = FlutterGooglePlacesSdk(GOOGLE_API_KEY);
@@ -56,10 +63,12 @@ class HomeCubit extends Cubit<HomeState> {
     double? lon, {
     bool force = false,
     bool updateLocation = true,
+    bool silent = false, // fetch data without triggering the loading state
   }) async {
     if (state.isLoading && !force) return;
     emit(
-      state.copyWith(isLoading: true, error: null, lat: lat, lon: lon),
+      state.copyWith(
+          isLoading: !silent && true, error: null, lat: lat, lon: lon),
     );
 
     RepoResponse<WeatherData> response = await _repo.getWeather(
@@ -195,5 +204,12 @@ class HomeCubit extends Cubit<HomeState> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(state.lat, state.lon);
     return placemarks.first.name ?? 'unknow';
+  }
+
+  @override
+  Future<void> close() {
+    timer?.cancel();
+    _debounce?.cancel();
+    return super.close();
   }
 }
