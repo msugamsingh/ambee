@@ -6,8 +6,8 @@ import 'package:ambee/app/home/widget/location_field_bottomsheet.dart';
 import 'package:ambee/app/home/widget/weather_detail_item_widget.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
-import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/helper/date_formatter.dart';
+import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
@@ -163,25 +163,28 @@ class HomePage extends StatelessWidget {
                               'Today',
                               style: Styles.tsRegularHeadline22,
                             ),
-                            TextIconButton(
-                              label: '8 days',
-                              icon: AppIcons.chevronForward,
-                              padding: const EdgeInsets.only(left: 8),
-                              onTap: () {
-                                Navigator.of(context).pushNamed(Routes.daily);
-                              },
-                              iconSize: 14,
-                              style: Styles.tsRegularBodyText.copyWith(
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? AppColors.white38
-                                    : AppColors.bgColor38,
-                              ),
-                              iconColor: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? AppColors.white38
-                                  : AppColors.bgColor38,
-                            )
+                            ((state.weatherData?.daily?.length ?? 0) >= 2)
+                                ? TextIconButton(
+                                    label: '8 days',
+                                    icon: AppIcons.chevronForward,
+                                    padding: const EdgeInsets.only(left: 8),
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pushNamed(Routes.daily);
+                                    },
+                                    iconSize: 14,
+                                    style: Styles.tsRegularBodyText.copyWith(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? AppColors.white38
+                                          : AppColors.bgColor38,
+                                    ),
+                                    iconColor: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? AppColors.white38
+                                        : AppColors.bgColor38,
+                                  )
+                                : const SizedBox(width: 8),
                           ],
                         ),
                       ),

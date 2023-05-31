@@ -81,7 +81,7 @@ class DailyData extends StatelessWidget {
               child: GetWeatherIcon(
                 width: width / 4,
                 height: width / 4,
-                name: state.weatherData?.daily?.first.weather?.first.icon,
+                name: state.weatherData?.daily?[2].weather?.first.icon,
               ),
             ),
             Expanded(
@@ -99,7 +99,7 @@ class DailyData extends StatelessWidget {
                     children: [
                       DegreeText(
                         text:
-                            "${state.weatherData?.daily?.first.temp?.max ?? 0}",
+                            "${state.weatherData?.daily?[2].temp?.max ?? 0}",
                         style: Styles.tsRegularHeadline32,
                         color: AppColors.white,
                         degreeSize: 8,
@@ -112,7 +112,7 @@ class DailyData extends StatelessWidget {
                       ),
                       DegreeText(
                         text:
-                            "${state.weatherData?.daily?.first.temp?.min ?? 0}",
+                            "${state.weatherData?.daily?[2].temp?.min ?? 0}",
                         degreeSize: 6,
                         color: AppColors.white38,
                         style: Styles.tsRegularBold16,
@@ -123,7 +123,7 @@ class DailyData extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    state.currentWeather?.main?.toString() ?? 'Unknown',
+                    state.weatherData?.daily?[2].weather?.first.main ?? 'Unknown',
                     style: Styles.tsRegularBodyText.copyWith(
                       color: AppColors.white38,
                     ),
