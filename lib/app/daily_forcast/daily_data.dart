@@ -34,7 +34,7 @@ class DailyData extends StatelessWidget {
             AppIcons.calendar,
             size: 20,
           ),
-          Text("8 days"),
+          Text("7 days"),
         ],
       ),
     );

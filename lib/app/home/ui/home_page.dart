@@ -168,7 +168,7 @@ class HomePage extends StatelessWidget {
                             ),
                             ((state.weatherData?.daily?.length ?? 0) >= 2)
                                 ? TextIconButton(
-                                    label: '8 days',
+                                    label: '7 days',
                                     icon: AppIcons.chevronForward,
                                     padding: const EdgeInsets.only(left: 8),
                                     onTap: () {
