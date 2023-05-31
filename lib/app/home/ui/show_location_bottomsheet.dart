@@ -44,6 +44,7 @@ Future kAppShowModalBottomSheet(
         } else {
           // cancelling debounce on home cubit when closes the bottomsheet
           BlocProvider.of<HomeCubit>(context).cancelDebounce();
+          BlocProvider.of<HomeCubit>(context).clearText();
         }
       }
     },

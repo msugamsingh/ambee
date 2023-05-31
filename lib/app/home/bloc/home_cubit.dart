@@ -135,6 +135,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   void cancelDebounce() => _debounce?.cancel();
 
+  void clearText() => locationController.text = '';
+
   // Method: Predicts locations based on the provided query string
   void predict(String s) async {
     // added a debouncer to handle the multi-calls on changing of query

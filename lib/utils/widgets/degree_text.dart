@@ -25,10 +25,12 @@ class DegreeText extends StatelessWidget {
       children: [
         SizedBox(
           height: style.fontSize! * 1.2,
-          child: Text(
-            text?.substring(0, 2) ?? '',
-            textAlign: TextAlign.center,
-            style: color != null ? style.copyWith(color: color) : style,
+          child: FittedBox(
+            child: Text(
+              text?.substring(0, 2) ?? '',
+              textAlign: TextAlign.center,
+              style: color != null ? style.copyWith(color: color) : style,
+            ),
           ),
         ),
         Padding(

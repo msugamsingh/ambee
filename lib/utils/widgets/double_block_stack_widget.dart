@@ -60,10 +60,12 @@ class DoubleStackWidget extends StatelessWidget {
               end: Alignment.bottomLeft,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
-            mainAxisAlignment: mainAxisAlignment ??  MainAxisAlignment.spaceBetween,
-            children: children,
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
+              mainAxisAlignment: mainAxisAlignment ??  MainAxisAlignment.spaceBetween,
+              children: children,
+            ),
           ),
         ),
       ],

@@ -88,10 +88,12 @@ class DailyData extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Tomorrow',
-                    style: Styles.tsRegularHeadline22
-                        .copyWith(color: AppColors.white),
+                  FittedBox(
+                    child: Text(
+                      'Tomorrow',
+                      style: Styles.tsRegularHeadline22
+                          .copyWith(color: AppColors.white),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -168,7 +170,7 @@ class DailyData extends StatelessWidget {
                           width: 8,
                         ),
                         Text(
-                          "${cubit.state.weatherData?.daily?[index].weather?.first.description}",
+                          "${cubit.state.weatherData?.daily?[index].weather?.first.main}",
                           style: TextStyle(
                             color:
                                 Theme.of(context).brightness == Brightness.dark
