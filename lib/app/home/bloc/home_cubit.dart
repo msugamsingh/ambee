@@ -50,17 +50,15 @@ class HomeCubit extends Cubit<HomeState> {
       final Uri deepLink = pendingDynamicLinkData.link;
       // https://aeweather.page.link/?link=https://www.getambee.com?lat=12.97&lon=77.59&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
 
-      Log.wtf(deepLink);
-      Log.wtf(deepLink.data.toString());
-      Log.wtf(deepLink.queryParameters);
-      final double? lat = double.tryParse(deepLink.queryParameters['lat'] ??
-          deepLink.queryParameters['latitude'] ??
-          '');
-      final double? lon = double.tryParse(deepLink.queryParameters['lon'] ??
-          deepLink.queryParameters['longitude'] ??
-          '');
+      final double? lat =
+          double.tryParse(deepLink.queryParameters['lat'] ?? '');
+      final double? lon =
+          double.tryParse(deepLink.queryParameters['lon'] ?? '');
       Log.wtf((lat, lon));
-      getWeather(lat, lon, force: true);
+      if (lat != null && lon != null) {
+        getWeather(lat, lon);
+      }
+      // else show some toast
     }
   }
 
@@ -77,7 +75,11 @@ class HomeCubit extends Cubit<HomeState> {
     // not setting isLoading to true if a method is silent
     emit(
       state.copyWith(
-          isLoading: !silent && true, error: null, lat: lat, lon: lon),
+        isLoading: !silent,
+        error: null,
+        lat: lat,
+        lon: lon,
+      ),
     );
 
     RepoResponse<WeatherData> response = await _repo.getWeather(
@@ -96,7 +98,7 @@ class HomeCubit extends Cubit<HomeState> {
         if (updateLocation) {
           placemarks = await placemarkFromCoordinates(state.lat, state.lon);
         }
-      } catch(e) {
+      } catch (e) {
         Log.e(e);
       }
 
@@ -110,18 +112,18 @@ class HomeCubit extends Cubit<HomeState> {
           currentWeather: response.data?.current?.weather?.first,
           weatherData: response.data,
           location:
-              updateLocation ? (placemarks?.first.locality ?? 'current') : null,
+              updateLocation ? (placemarks?.first.locality ?? 'Unknown') : null,
         ),
       );
     } else {
       if (!silent) {
-      // not showing err if its a silent update
-      emit(
-        state.copyWith(
-          isLoading: false,
-          error: response.error?.message ?? ErrorMessages.somethingWentWrong,
-        ),
-      );
+        // not showing err if its a silent update
+        emit(
+          state.copyWith(
+            isLoading: false,
+            error: response.error?.message ?? ErrorMessages.somethingWentWrong,
+          ),
+        );
       }
     }
   }
@@ -146,11 +148,9 @@ class HomeCubit extends Cubit<HomeState> {
         return;
       }
       try {
-
         // finding cities based on the query
         final result = await _places.findAutocompletePredictions(
           s,
-          countries: ['in'],
           placeTypeFilter: _placeTypeFilter,
           newSessionToken: false,
         );

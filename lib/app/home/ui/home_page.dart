@@ -38,7 +38,10 @@ class HomePage extends StatelessWidget {
               AppIcons.location,
               size: 20,
             ),
-            Text(state.location),
+            Text(
+              state.location,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
