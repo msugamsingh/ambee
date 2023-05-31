@@ -13,12 +13,11 @@ class FirebaseDynamicLinkServices {
 
     if (initialLink != null) {
       final Uri deepLink = initialLink.link;
-      final double? lat = double.tryParse(deepLink.queryParameters['lat'] ??
-          deepLink.queryParameters['latitude'] ??
-          '');
-      final double? lon = double.tryParse(deepLink.queryParameters['lon'] ??
-          deepLink.queryParameters['longitude'] ??
-          '');
+      final double? lat = double.tryParse(deepLink.queryParameters['lat'] ?? '');
+      final double? lon = double.tryParse(deepLink.queryParameters['lon'] ?? '');
+      if (lat == null || lon == null) {
+        return null;
+      }
       return (lat, lon);
     } else {
       return null;

@@ -84,76 +84,71 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return SplashCubit(context);
-      },
-      child: Scaffold(
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.mainColorSecondary,
-                AppColors.mainColor,
-                AppColors.mainColorPrimary,
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.mainColorSecondary,
+              AppColors.mainColor,
+              AppColors.mainColorPrimary,
+            ],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
           ),
-          child: BlocBuilder<SplashCubit, SplashState>(
-            builder: (context, splashState) {
-              if (!splashState.error.isNullOrEmpty) {
-                onError(
-                  context: context,
-                  message: splashState.error,
-                  action: SnackBarAction(
-                    label: 'Retry',
-                    onPressed: () {
-                      context.read<SplashCubit>().refreshFetchData(context);
-                    },
-                  ),
-                );
-              }
-              return BlocListener<HomeCubit, HomeState>(
-                listenWhen: (_, __) => splashState.listen,
-                listener: context.read<SplashCubit>().navigateToHome,
-                child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    return Stack(
-                      children: [
-                        positionedImage(
-                          image: WeatherIcons.getWeatherIcon('02d'),
-                          left: -constraints.maxWidth * .2,
-                          right: -constraints.maxWidth * .1,
-                          top: constraints.maxHeight - 200,
-                        ),
-                        positionedImage(
-                          image: WeatherIcons.getWeatherIcon('shower_rain'),
-                          left: constraints.maxWidth * .2,
-                          right: constraints.maxWidth * .1,
-                          bottom: constraints.maxHeight - 200,
-                        ),
-                        positionedImage(
-                          image: WeatherIcons.getWeatherIcon('01d'),
-                          left: constraints.maxWidth - 200,
-                          bottom: constraints.maxHeight * .5,
-                        ),
-                        positionedImage(
-                          image: WeatherIcons.getWeatherIcon('01n'),
-                          right: constraints.maxWidth - 200,
-                          top: constraints.maxHeight * .5,
-                        ),
-                        loadingCard(context, splashState),
-                      ],
-                    );
+        ),
+        child: BlocBuilder<SplashCubit, SplashState>(
+          builder: (context, splashState) {
+            if (!splashState.error.isNullOrEmpty) {
+              onError(
+                context: context,
+                message: splashState.error,
+                action: SnackBarAction(
+                  label: 'Retry',
+                  onPressed: () {
+                    context.read<SplashCubit>().refreshFetchData(context);
                   },
                 ),
               );
-            },
-          ),
+            }
+            return BlocListener<HomeCubit, HomeState>(
+              listenWhen: (_, __) => splashState.listen,
+              listener: context.read<SplashCubit>().navigateToHome,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return Stack(
+                    children: [
+                      positionedImage(
+                        image: WeatherIcons.getWeatherIcon('02d'),
+                        left: -constraints.maxWidth * .2,
+                        right: -constraints.maxWidth * .1,
+                        top: constraints.maxHeight - 200,
+                      ),
+                      positionedImage(
+                        image: WeatherIcons.getWeatherIcon('shower_rain'),
+                        left: constraints.maxWidth * .2,
+                        right: constraints.maxWidth * .1,
+                        bottom: constraints.maxHeight - 200,
+                      ),
+                      positionedImage(
+                        image: WeatherIcons.getWeatherIcon('01d'),
+                        left: constraints.maxWidth - 200,
+                        bottom: constraints.maxHeight * .5,
+                      ),
+                      positionedImage(
+                        image: WeatherIcons.getWeatherIcon('01n'),
+                        right: constraints.maxWidth - 200,
+                        top: constraints.maxHeight * .5,
+                      ),
+                      loadingCard(context, splashState),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
     );

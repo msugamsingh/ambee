@@ -1,6 +1,7 @@
 import 'package:ambee/app/daily_forcast/daily_data.dart';
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/home/ui/home_page.dart';
+import 'package:ambee/app/splash/bloc/splash_cubit.dart';
 import 'package:ambee/app/splash/ui/splash_page.dart';
 import 'package:ambee/app/user/bloc/user_cubit.dart';
 import 'package:ambee/app/user/ui/add_user_details.dart';
@@ -53,6 +54,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (BuildContext context) => HomeCubit(),
+        ),
+
+        BlocProvider(
+          create: (BuildContext context) => SplashCubit(context),
         ),
         BlocProvider(
           create: (BuildContext context) => UserCubit(),
