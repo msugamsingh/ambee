@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:ambee/app/home/bloc/home_cubit.dart';
 import 'package:ambee/app/splash/bloc/splash_cubit.dart';
-import 'package:ambee/data/network/network_error_messages.dart';
 import 'package:ambee/data/theme/theme_cubit.dart';
 import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
+import 'package:ambee/utils/widgets/err_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -82,35 +82,6 @@ class SplashPage extends StatelessWidget {
     );
   }
 
-  void onError({
-    required BuildContext context,
-    String? message,
-  }) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.bgColor,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(24),
-            ),
-          ),
-          duration: const Duration(minutes: 5),
-          content: Text(
-            message ?? ErrorMessages.networkGeneral,
-          ),
-          action: SnackBarAction(
-            label: 'Retry',
-            onPressed: () {
-              context.read<SplashCubit>().refreshFetchData(context);
-            },
-          ),
-        ),
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -135,7 +106,16 @@ class SplashPage extends StatelessWidget {
           child: BlocBuilder<SplashCubit, SplashState>(
             builder: (context, splashState) {
               if (!splashState.error.isNullOrEmpty) {
-                onError(context: context, message: splashState.error);
+                onError(
+                  context: context,
+                  message: splashState.error,
+                  action: SnackBarAction(
+                    label: 'Retry',
+                    onPressed: () {
+                      context.read<SplashCubit>().refreshFetchData(context);
+                    },
+                  ),
+                );
               }
               return BlocListener<HomeCubit, HomeState>(
                 listenWhen: (_, __) => splashState.listen,

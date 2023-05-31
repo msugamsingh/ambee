@@ -29,7 +29,7 @@ class EndDrawer extends StatelessWidget {
         style: Styles.tsRegularBodyText.copyWith(color: AppColors.white),
       ),
       subtitle: Text(
-        state.user!.email ?? 'Tap to add name',
+        state.user?.email ?? 'Tap to add name',
         style: Styles.tsLight12.copyWith(
           color: AppColors.white38,
         ),

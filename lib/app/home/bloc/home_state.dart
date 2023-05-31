@@ -61,7 +61,7 @@ class HomeState extends Equatable {
       location: location ?? this.location,
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
-      error: error ?? this.error,
+      error: error,
       weatherData: weatherData ?? this.weatherData,
       selectedHourIndex: selectedHourIndex ?? this.selectedHourIndex,
       selectedHourData: selectedHourData ?? this.selectedHourData,

@@ -6,11 +6,13 @@ import 'package:ambee/app/home/widget/location_field_bottomsheet.dart';
 import 'package:ambee/app/home/widget/weather_detail_item_widget.dart';
 import 'package:ambee/data/routes.dart';
 import 'package:ambee/data/theme/text_styles.dart';
+import 'package:ambee/utils/helper/string_extensions.dart';
 import 'package:ambee/utils/helper/date_formatter.dart';
 import 'package:ambee/utils/values/app_colors.dart';
 import 'package:ambee/utils/values/app_icons.dart';
 import 'package:ambee/utils/widgets/degree_text.dart';
 import 'package:ambee/utils/widgets/double_block_stack_widget.dart';
+import 'package:ambee/utils/widgets/err_snackbar.dart';
 import 'package:ambee/utils/widgets/get_weather_icon_widget.dart';
 import 'package:ambee/utils/widgets/loading_util.dart';
 import 'package:ambee/utils/widgets/text_icon_button.dart';
@@ -130,6 +132,10 @@ class HomePage extends StatelessWidget {
           });
         } else if (!state.isLoading) {
           LoadingUtil.hideLoader();
+        }
+
+        if (!state.error.isNullOrEmpty) {
+          onError(context: context, message: state.error);
         }
         return Scaffold(
           key: globalKey,

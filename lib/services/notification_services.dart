@@ -2,6 +2,8 @@ import 'package:ambee/utils/helper/my_logger.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+
+// Service to show Notification
 class LocalNotification {
   static final FlutterLocalNotificationsPlugin _notificationPlugin =
       FlutterLocalNotificationsPlugin();

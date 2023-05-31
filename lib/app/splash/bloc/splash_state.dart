@@ -24,7 +24,7 @@ class SplashState extends Equatable {
   }) {
     return SplashState(
       listen: listen ?? this.listen,
-      error: error ?? this.error,
+      error: error,
       lat: lat ?? this.lat,
       long: long ?? this.long,
     );

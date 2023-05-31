@@ -68,7 +68,7 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   // Method: Navigates to the home screen based on the provided HomeState
-  void navigateToHome(context, homeState) {
+  void navigateToHome(context, HomeState homeState) {
     if (!homeState.isLoading && homeState.error == null) {
       Navigator.popAndPushNamed(context, Routes.home);
       emit(state.copyWith(listen: false));
@@ -80,7 +80,7 @@ class SplashCubit extends Cubit<SplashState> {
   // Method: Refreshes the weather data by calling the getWeather method in HomeCubit
   void refreshFetchData(BuildContext context) {
     var hCubit = context.read<HomeCubit>();
+    emit(state.copyWith(listen: true, error:  null));
     hCubit.getWeather(state.lat, state.long);
-    emit(state.copyWith(listen: true, error: null));
   }
 }

@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
     FirebaseDynamicLinkServices.onReceiveDynamicLink(_onReceiveLink);
     timer = Timer.periodic(const Duration(minutes: 10), (_) {
       if (!state.isLoading) {
-        /// silently updating data in every 5 min
+        /// silently updating data in every 10 min
         getWeather(state.lat, state.lon, silent: true);
       }
     });
@@ -84,18 +84,23 @@ class HomeCubit extends Cubit<HomeState> {
       lat: lat ?? state.lat,
       lon: lon ?? state.lon,
     );
-    List<Placemark>? placemarks;
-
-    // updating location from coordinates only if updateLocation is true;
-    // not updating location label if its selected from prediction list
-    if (updateLocation) {
-      placemarks = await placemarkFromCoordinates(state.lat, state.lon);
-    }
-
-    Log.wtf(placemarks);
 
     if (response.error == null && response.data != null) {
       Log.i(response.data?.toJson());
+
+      List<Placemark>? placemarks;
+
+      // updating location from coordinates only if updateLocation is true;
+      // not updating location label if its selected from prediction list
+      try {
+        if (updateLocation) {
+          placemarks = await placemarkFromCoordinates(state.lat, state.lon);
+        }
+      } catch(e) {
+        Log.e(e);
+      }
+
+      Log.wtf(placemarks);
 
       // emit the fetched data
       emit(
@@ -105,16 +110,19 @@ class HomeCubit extends Cubit<HomeState> {
           currentWeather: response.data?.current?.weather?.first,
           weatherData: response.data,
           location:
-              updateLocation ? (placemarks?.first.locality ?? 'Unknown') : null,
+              updateLocation ? (placemarks?.first.locality ?? 'current') : null,
         ),
       );
     } else {
+      if (!silent) {
+      // not showing err if its a silent update
       emit(
         state.copyWith(
           isLoading: false,
           error: response.error?.message ?? ErrorMessages.somethingWentWrong,
         ),
       );
+      }
     }
   }
 
@@ -232,6 +240,7 @@ class HomeCubit extends Cubit<HomeState> {
   String getRainPop() {
     return '${((state.selectedHourData?.pop) ?? 0) * 100}%';
   }
+
   // Method: Retrieves the UV index based on the current weather data
   String getUVI() {
     return (state.weatherData?.current?.uvi?.toString()) ?? '';
