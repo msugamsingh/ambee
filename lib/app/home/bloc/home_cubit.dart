@@ -133,7 +133,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   void cancelDebounce() => _debounce?.cancel();
 
-  void clearText() => locationController.text = '';
+  void onBottomSheetClose() {
+    locationController.text = '';
+    emit(state.copyWith(locationPredictions: const []));
+  }
 
   // Method: Predicts locations based on the provided query string
   void predict(String s) async {
