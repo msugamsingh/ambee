@@ -62,7 +62,7 @@ class DailyData extends StatelessWidget {
         ),
         WeatherDetailItem(
           icon: AppIcons.rain,
-          value: ("${(cubit.state.weatherData?.daily?.first.pop ?? 0) * 100}%"),
+          value: ("${((cubit.state.weatherData?.daily?.first.pop ?? 0) * 100).toInt()}%"),
           label: 'Chances',
         ),
       ],

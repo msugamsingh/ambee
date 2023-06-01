@@ -31,6 +31,7 @@ class HourlyWeather extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// building hourly widget for today's hours only
     return hourly == null ||
             (hourly?.dt != null &&
                 DateTime.now().day !=

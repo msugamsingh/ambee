@@ -49,8 +49,7 @@ class HomePage extends StatelessWidget {
         IconButton(
           icon: const Icon(AppIcons.threeDotsMenu),
           onPressed: () {
-            // context.read<ThemeCubit>().changeTheme();
-            globalKey.currentState!.openEndDrawer();
+            scaffoldKey.currentState!.openEndDrawer();
           },
         ),
       ],
@@ -84,11 +83,10 @@ class HomePage extends StatelessWidget {
   Widget weatherContent(double width, HomeState state, HomeCubit cubit) {
     return DoubleStackWidget(
       children: [
-        const Spacer(),
-        GetWeatherIcon(
-          name: state.currentWeather?.icon,
-          width: width / 1.5,
-          height: width / 2,
+        Expanded(
+          child: GetWeatherIcon(
+            name: state.currentWeather?.icon,
+          ),
         ),
         DegreeText(
           text: cubit.getTemp(),
@@ -121,7 +119,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  final globalKey = GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +139,7 @@ class HomePage extends StatelessWidget {
           onError(context: context, message: state.error);
         }
         return Scaffold(
-          key: globalKey,
+          key: scaffoldKey,
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
           endDrawer: const EndDrawer(),

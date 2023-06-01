@@ -102,6 +102,18 @@ class LocationBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               _showPredictionList(cubit, state),
+              OutlinedButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  cubit.onLocationSearchPredict();
+                },
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: const Text('Search'),
+              ),
             ],
           );
         },

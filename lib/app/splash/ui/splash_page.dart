@@ -105,6 +105,7 @@ class SplashPage extends StatelessWidget {
               onError(
                 context: context,
                 message: splashState.error,
+                seconds: 60,
                 action: SnackBarAction(
                   label: 'Retry',
                   onPressed: () {

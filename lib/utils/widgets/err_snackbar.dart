@@ -8,6 +8,7 @@ void onError({
   required BuildContext context,
   String? message,
   SnackBarAction? action,
+  int? seconds,
 }) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -19,7 +20,7 @@ void onError({
             topRight: Radius.circular(24),
           ),
         ),
-        duration: const Duration(minutes: 5),
+        duration: Duration(seconds: seconds ?? 5),
         content: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(

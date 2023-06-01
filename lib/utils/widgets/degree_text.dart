@@ -23,13 +23,17 @@ class DegreeText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
+        Container(
           height: style.fontSize! * 1.2,
+          constraints: const BoxConstraints(minWidth: 1),
           child: FittedBox(
-            child: Text(
-              text?.substring(0, 2) ?? '',
-              textAlign: TextAlign.center,
-              style: color != null ? style.copyWith(color: color) : style,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 1),
+              child: Text(
+                text?.substring(0, 2) ?? '',
+                textAlign: TextAlign.center,
+                style: color != null ? style.copyWith(color: color) : style,
+              ),
             ),
           ),
         ),

@@ -48,8 +48,6 @@ class HomeCubit extends Cubit<HomeState> {
   void _onReceiveLink(PendingDynamicLinkData pendingDynamicLinkData) {
     if (pendingDynamicLinkData != null) {
       final Uri deepLink = pendingDynamicLinkData.link;
-      // https://aeweather.page.link/?link=https://www.getambee.com?lat=12.97&lon=77.59&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
-
       final double? lat =
           double.tryParse(deepLink.queryParameters['lat'] ?? '');
       final double? lon =
@@ -176,16 +174,38 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   // Method: Handles the selection of a location prediction
-  Future<void> onPredictionSelect(String title) async {
+  Future<void> onPredictionSelect(String title,) async {
     if (title.isNullOrEmpty) return;
     // location from prediction
     String locality = title.split(',').first;
-    emit(state.copyWith(location: locality, isLoading: true));
+    emit(state.copyWith(isLoading: true, error: null));
 
     // locations based on the selected address/prediction
-    List<Location> locations = await locationFromAddress(title);
-    final Location location = locations.first;
+    List<Location>? locations;
+    Location? location;
+    try {
+      locations = await locationFromAddress(title);
+    } catch (e) {
+      emit(
+        state.copyWith(
+            error: 'Couldn\'t find the selected location', isLoading: false),
+      );
+      return;
+    }
 
+    if (locations != null && locations.isNotEmpty) {
+      location = locations.first;
+    }
+
+    if (location == null) {
+      emit(
+        state.copyWith(
+            error: 'Couldn\'t find the selected location', isLoading: false),
+      );
+      return;
+    }
+
+    emit(state.copyWith(location: locality, error: null));
     await getWeather(
       location.latitude,
       location.longitude,
@@ -240,7 +260,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   // Method: Retrieves the rain probability based on the selected hourly item or current weather data
   String getRainPop() {
-    return '${((state.selectedHourData?.pop) ?? 0) * 100}%';
+    return '${(((state.selectedHourData?.pop) ?? 0) * 100).toInt()}%';
   }
 
   // Method: Retrieves the UV index based on the current weather data
@@ -253,6 +273,51 @@ class HomeCubit extends Cubit<HomeState> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(state.lat, state.lon);
     return placemarks.first.name ?? 'unknown';
+  }
+
+  void onLocationSearchPredict() async {
+    var query = locationController.text.trim();
+    if (query.isNullOrEmpty) return;
+
+    emit(
+      state.copyWith(isLoading: true, error: null),
+    );
+
+    // locations based on the selected address/prediction
+    List<Location>? locations;
+    Location? location;
+
+    try {
+      locations = await locationFromAddress(query);
+    } catch (e) {
+      emit(
+        state.copyWith(
+            error: 'Couldn\'t find the desired location', isLoading: false),
+      );
+      return;
+    }
+
+    if (locations != null && locations.isNotEmpty) {
+      location = locations.first;
+    }
+
+    if (location == null) {
+      emit(
+        state.copyWith(
+            error: 'Couldn\'t find the desired location', isLoading: false),
+      );
+      return;
+    }
+
+    await getWeather(
+      location.latitude,
+      location.longitude,
+      force: true,
+      updateLocation: false,
+    );
+
+    // setting the controller to empty once done fetching
+    locationController.text = '';
   }
 
   @override

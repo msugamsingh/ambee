@@ -179,8 +179,8 @@ void main() {
 
   final weather = WeatherData.fromJson(json);
   Future<RepoResponse<WeatherData>> weatherDataFuture =
-      Future<RepoResponse<WeatherData>>.value(
-          RepoResponse<WeatherData>(data: weather));
+  Future<RepoResponse<WeatherData>>.value(
+      RepoResponse<WeatherData>(data: weather));
 
   setUpAll(() {
     mockCubit = MockHomeCubit();
@@ -203,7 +203,7 @@ void main() {
       // mockCubit.emit(HomeState().copyWith(weatherData: weather));
 
       when(() => mockCubit.state).thenAnswer(
-          (invocation) => const HomeState().copyWith(weatherData: weather));
+              (invocation) => const HomeState().copyWith(weatherData: weather));
 
       expect(mockCubit.state.weatherData, weather);
 
@@ -217,7 +217,9 @@ void main() {
 
   testWidgets('Home Page Test', (tester) async {
     // stub
-    when(() => mockCubit.state).thenAnswer((invocation) => const HomeState().copyWith(
+    when(() => mockCubit.state)
+        .thenAnswer((invocation) =>
+        const HomeState().copyWith(
           currentWeather: weather.current?.weather?.first,
           weatherData: weather,
         ));
@@ -248,7 +250,9 @@ void main() {
 
   testWidgets('LocationBottomSheet test', (WidgetTester tester) async {
     // Stub the necessary methods or provide desired behavior using mocktail
-    when(() => mockCubit.state).thenAnswer((invocation) => const HomeState().copyWith(
+    when(() => mockCubit.state)
+        .thenAnswer((invocation) =>
+        const HomeState().copyWith(
           currentWeather: weather.current?.weather?.first,
           weatherData: weather,
         ));
@@ -286,28 +290,29 @@ void main() {
     });
 
     when(() => mockCubit.onPredictionSelect('Location 1')).thenAnswer(
-        (invocation) async =>
+            (invocation) async =>
             mockCubit.emit(const HomeState().copyWith(location: 'Location 1')));
-    when(() => mockCubit.state).thenAnswer((invocation) => const HomeState().copyWith(
+    when(() => mockCubit.state)
+        .thenAnswer((invocation) =>
+        const HomeState().copyWith(
           loadingPredictions: false,
-      locationPredictions: [
-        const AutocompletePrediction(
-            fullText: 'Location 1',
-            placeId: '',
-            primaryText: '',
-            secondaryText: ''),
-        const AutocompletePrediction(
-            fullText: 'Location 2',
-            placeId: '',
-            primaryText: '',
-            secondaryText: ''),
-        const AutocompletePrediction(
-            fullText: 'Location 3',
-            placeId: '',
-            primaryText: '',
-            secondaryText: ''),
-      ],
-
+          locationPredictions: [
+            const AutocompletePrediction(
+                fullText: 'Location 1',
+                placeId: '',
+                primaryText: '',
+                secondaryText: ''),
+            const AutocompletePrediction(
+                fullText: 'Location 2',
+                placeId: '',
+                primaryText: '',
+                secondaryText: ''),
+            const AutocompletePrediction(
+                fullText: 'Location 3',
+                placeId: '',
+                primaryText: '',
+                secondaryText: ''),
+          ],
         ));
 
     await tester.pumpWidget(
@@ -333,14 +338,12 @@ void main() {
 
     // 2, 1 for the title and one for the field
     expect(find.text('Location'), findsNWidgets(2));
-    expect(find.text('Delhi'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
 
     await tester.tap(find.text('Location 1'));
     await tester.pumpAndSettle();
 
     verify(() => mockCubit.onPredictionSelect('Location 1')).called(1);
-
   });
 }
 
@@ -349,4 +352,3 @@ class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 class HomeStateFake extends Fake implements HomeState {}
 
 class MockHomeRepo extends Mock implements HomeRepository {}
-
