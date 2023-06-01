@@ -19,7 +19,13 @@ Utilizes 3D icons to enhance the app's UI.
 
 - ## Dynamic Links 🔗
 Users can use dynamic links to open specific locations. Use the following format for the link:
-https://aeweather.page.link/?link=https://www.getambee.com?lat=12.97&lon=77.59&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
+https://aeweather.page.link/?link=https%3A%2F%2Fwww.getambee.com%3Flat%3D{{lat_of_desired_city}}%26lon%3D{{lon_of_desired_city}}&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
+
+Dynamic link for `Bangluru`
+https://aeweather.page.link/?link=https%3A%2F%2Fwww.getambee.com%3Flat%3D12.97%26lon%3D77.59&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
+
+Dynamic link for `Delhi`
+https://aeweather.page.link/?link=https%3A%2F%2Fwww.getambee.com%3Flat%3D28.7%26lon%3D77.10&apn=com.ambee.ambee&afl=https://www.getambee.com&efr=1
 
 Adjust the latitude (**lat**) and longitude (**lon**) values in the link to the desired location's coordinates.
 
@@ -35,12 +41,18 @@ Users receive daily notifications from the app at 12 PM and 4 PM.
 - **Smooth Animations:** Features smooth and visually appealing animations.
 
 
-## Future Imporvements
+## Future Improvements
 - **Firebase Remote Config Support:** Implement support for Flutter Remote Config to securely store and retrieve important keys from Firebase, ensuring better management and security.
 
 - **Icon Resizing:** Optimize the app size by resizing and compressing the included weather icons to reduce the overall size without compromising the UI quality.
 
 - **Screen_util:** Utilize the Screen_util package to achieve extraordinary responsiveness across various screen sizes and devices, improving the app's user experience.
+
+- **Flutter Flavors:** Implement Flutter Flavors to support different environments (e.g., development, staging, production) and easily manage configurations for each environment.
+ 
+- **Crashlytics:**  Integrate Crashlytics for better crash reporting and monitoring, enabling developers to identify and fix issues more efficiently.
+
+- **Firebase Analytics:**  Incorporate analytics tools (e.g., Firebase Analytics) to gain insights into user behavior, track app usage, and make data-driven decisions for further app enhancements.
 
 ## Installation
 
