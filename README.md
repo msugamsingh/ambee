@@ -56,7 +56,7 @@ Users receive daily notifications from the app at 12 PM and 4 PM.
 
 ## Installation
 
-1. Go to the release page.
+1. Go to the [release page](https://github.com/msugamsingh/ambee/releases).
 2. Download the appropriate APK file for your device. If you are unsure, choose the FAT APK.
 3. Install the downloaded APK on your device.
 
