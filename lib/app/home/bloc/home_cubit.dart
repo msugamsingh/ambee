@@ -183,6 +183,8 @@ class HomeCubit extends Cubit<HomeState> {
     // locations based on the selected address/prediction
     List<Location>? locations;
     Location? location;
+
+    // trying to get the location for the co-ordinates
     try {
       locations = await locationFromAddress(title);
     } catch (e) {
@@ -197,6 +199,7 @@ class HomeCubit extends Cubit<HomeState> {
       location = locations.first;
     }
 
+    // show error if failed
     if (location == null) {
       emit(
         state.copyWith(
@@ -205,6 +208,7 @@ class HomeCubit extends Cubit<HomeState> {
       return;
     }
 
+    // update the locality with the selected name
     emit(state.copyWith(location: locality, error: null));
     await getWeather(
       location.latitude,
@@ -268,13 +272,6 @@ class HomeCubit extends Cubit<HomeState> {
     return (state.weatherData?.current?.uvi?.toString()) ?? '';
   }
 
-  // Method: Retrieves the current location name based on the latitude and longitude in the state
-  Future<String> getLocation() async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(state.lat, state.lon);
-    return placemarks.first.name ?? 'unknown';
-  }
-
   void onLocationSearchPredict() async {
     var query = locationController.text.trim();
     if (query.isNullOrEmpty) return;
@@ -283,10 +280,10 @@ class HomeCubit extends Cubit<HomeState> {
       state.copyWith(isLoading: true, error: null),
     );
 
-    // locations based on the selected address/prediction
     List<Location>? locations;
     Location? location;
 
+    // trying to get the location of the searched query
     try {
       locations = await locationFromAddress(query);
     } catch (e) {
@@ -301,6 +298,7 @@ class HomeCubit extends Cubit<HomeState> {
       location = locations.first;
     }
 
+    // if failed to get the location
     if (location == null) {
       emit(
         state.copyWith(
@@ -309,11 +307,12 @@ class HomeCubit extends Cubit<HomeState> {
       return;
     }
 
+    // update data if found the co-ordinates of the selected query
     await getWeather(
       location.latitude,
       location.longitude,
       force: true,
-      updateLocation: false,
+      updateLocation: true,
     );
 
     // setting the controller to empty once done fetching
