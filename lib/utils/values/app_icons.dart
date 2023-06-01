@@ -20,6 +20,8 @@ class AppIcons {
   static const IconData user = CupertinoIcons.profile_circled;
 }
 
+
+// todo: Future Improvements - Bring down the icon sizes or use the openWeatherApi ones
 class WeatherIcons {
   static const _path = 'assets/icons/weather/';
 

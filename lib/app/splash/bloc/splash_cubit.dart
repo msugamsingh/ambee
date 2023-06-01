@@ -40,6 +40,10 @@ class SplashCubit extends Cubit<SplashState> {
       return null;
     }
 
+    // todo: Future Improvements - if user has given the permission
+    // and currently disabled the location service, pick location co-ordinates
+    // from storage
+
     final position = await Geolocator.getCurrentPosition();
 
     // return coordinates record
